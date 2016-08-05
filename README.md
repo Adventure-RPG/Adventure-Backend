@@ -1,6 +1,8 @@
 ## Build
  
 ```
-$ npm start 
-$ npm run build-css 
+$ npm install
+$ bower install
+$ npm run build-css
+$ npm start
 ``` 
