@@ -1,15 +1,16 @@
-var express = require('express');
-function Router(db) {
+module.exports = function (db) {
+    var express = require('express');
+
     var router = express.Router();
-    var Users = require('./users.js');
-    var users = new Users(db);
+    var users = require('./users.js')(db);
     router.get('/api/v1/users', users.all);
     router.get('/api/v1/users/:id', users.one);
     router.post('/api/v1/users/', users.create);
     router.put('/api/v1/users/:id', users.update);
     router.delete('/api/v1/users/:id', users.delete);
+
     return router;
-}
+};
  
 //var auth = require('./auth.js');
 //var products = require('./products.js');
@@ -32,5 +33,3 @@ router.delete('/api/v1/product/:id', products.delete);
 /*
  * Routes that can be accessed only by authenticated & authorized users
  */
-
-module.exports = Router;

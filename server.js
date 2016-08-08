@@ -9,6 +9,16 @@ var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
+//Connect to database
+var db_config = {
+    user: 'auth_user',
+    pass: 'N60eiGBPI40Ip9o8',
+    host: 'localhost',
+    db: 'auth'
+};
+app.set('db', massive.connectSync({connectionString: require('util').format('postgres://%s:%s@%s/%s',
+    db_config.user, db_config.pass, db_config.host, db_config.db)}));
+
 app.all('/*', function(req, res, next) {
 // CORS headers
 res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
@@ -23,16 +33,6 @@ if (req.method == 'OPTIONS') {
 });
 app.use(express.static('static'));
 //app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
-
-var db_config = {
-    user: 'auth_user',
-    pass: 'N60eiGBPI40Ip9o8',
-    host: 'localhost',
-    db: 'auth'
-};
-//Connect to database
-app.set('db', massive.connectSync({connectionString: require('util').format('postgres://%s:%s@%s/%s',
-    db_config.user, db_config.pass, db_config.host, db_config.db)}));
 app.use('/', require('./routes')(app.get('db')));
 // If no route is matched by now, it must be a 404
 app.use(function(req, res, next) {
@@ -41,6 +41,7 @@ err.status = 404;
 next(err);
 });
 
+//Server options
 var options = {
     key: fs.readFileSync('keys/key.pem'),
     cert: fs.readFileSync('keys/cert.pem')
