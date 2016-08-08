@@ -1,5 +1,5 @@
 var express = require('express');
-function router(db) {
+function Router(db) {
     var router = express.Router();
     var Users = require('./users.js');
     var users = new Users(db);
@@ -8,6 +8,7 @@ function router(db) {
     router.post('/api/v1/users/', users.create);
     router.put('/api/v1/users/:id', users.update);
     router.delete('/api/v1/users/:id', users.delete);
+    return router;
 }
  
 //var auth = require('./auth.js');
@@ -32,4 +33,4 @@ router.delete('/api/v1/product/:id', products.delete);
  * Routes that can be accessed only by authenticated & authorized users
  */
 
-module.exports = router;
+module.exports = Router;
