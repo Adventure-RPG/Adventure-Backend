@@ -7,7 +7,6 @@ module.exports = function (db) {
 
     var auth = {
         login: function(req, res) {
-            console.log(req);
             var username = req.body.username || '';
             var password = req.body.password || '';
 
@@ -26,7 +25,13 @@ module.exports = function (db) {
                     res.status(401);
                     return res.json({"status": 400, "message": err.message});
                 }
-                res.json(genToken(user))
+                genToken(user, function (err, token) {
+                    if (err){
+                        res.status(401);
+                        return res.json({"status": 400, "message": err.message});
+                    }
+                    return res.json(token)
+                })
             });
         },
 
@@ -45,11 +50,14 @@ module.exports = function (db) {
     };
 
 // private method
-function genToken(user) {
-
-  var expires = expiresIn(7); // 7 days
-  jwt.sign({id: user.id, username: user.username, group: user.group_id},cert, function (err, token) {
-      return {token: token, expires: expires, user: user};
+function genToken(user, callback) {
+var expires = expiresIn(7); // 7 days
+var payload = {"id": user.id, "username": user.username, "group": user.group_id};
+  jwt.sign(payload, cert, { algorithm: 'RS256'},
+      function (err, token) {
+        if (err)
+            return callback(err);
+        callback(null, {"token": token, "expires": expires, "user": payload});
   });
 }
 
