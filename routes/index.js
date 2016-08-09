@@ -6,8 +6,8 @@ module.exports = function (db) {
     router.get('/api/v1/users', users.all);
     router.get('/api/v1/users/:id', users.one);
     router.post('/api/v1/users/', users.create);
-    router.put('/api/v1/users/:id', users.update);
-    router.delete('/api/v1/users/:id', users.delete);
+    router.put('/api/v1/admin/users/:id', users.update);
+    router.delete('/api/v1/admin/users/:id', users.delete);
     //Auth
     var auth = require('./auth.js')(db);
     router.post('/login', auth.login);

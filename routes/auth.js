@@ -1,8 +1,13 @@
 module.exports = function (db) {
     var jwt = require('jsonwebtoken');
     var crypto = require('crypto');
+    var verify = require('../utils/passgen.js').verifyPassword;
+
+    var cert = require('fs').readFileSync(__dirname + '/../keys/key.pem');
+
     var auth = {
         login: function(req, res) {
+            console.log(req);
             var username = req.body.username || '';
             var password = req.body.password || '';
 
@@ -10,74 +15,48 @@ module.exports = function (db) {
                 res.status(401);
                 return res.json({
                 "status": 401,
-                "message": "Invalid credentials"
+                "message": "Учетные данные не были предоставлены."
             });
             }
 
             // Fire a query to your DB and check if the credentials are valid
-            var dbUserObj = auth.validate(username, password);
-
-            if (!dbUserObj) { // If authentication fails, we send a 401 back
-            res.status(401);
-            return res.json({
-                "status": 401,
-                "message": "Invalid credentials"
+            auth.validate(username, password, function (err, user) {
+                if (err)
+                {
+                    res.status(401);
+                    return res.json({"status": 400, "message": err.message});
+                }
+                res.json(genToken(user))
             });
-            }
-
-            if (dbUserObj) {
-
-            // If authentication is success, we will generate a token
-            // and dispatch it to the client
-
-            res.json(genToken(dbUserObj));
-            }
         },
 
-        validate: function(username, password) {
+        validate: function(username, password, callback) {
             // spoofing the DB response for simplicity
-            var dbUserObj = { // spoofing a userobject from the DB.
-                name: 'arvind',
-                role: 'admin',
-                username: 'arvind@myapp.com'
-            };
-            crypto.pbkdf2('password', 'salt', 1000, 24, function(err, key){
-                var hexHash = Buffer(encodedPassword, 'binary').toString('hex');
-                // do something with the hashed password
+            require('../models/users.js')(db).one({username: username}, function (err, user) {
+                if(err || !user)
+                    return callback(new Error('Учетная запись не найдена.'));
+                verify(password, user.password, function (err, ver) {
+                    if (err || !ver)
+                        return callback(new Error('Неверный логин или пароль.'));
+                    callback(null, user)
+                });
             });
-
-            return dbUserObj;
-        },
-
-        validateUser: function(username) {
-            // spoofing the DB response for simplicity
-            var dbUserObj = { // spoofing a userobject from the DB.
-                name: 'arvind',
-                role: 'admin',
-                username: 'arvind@myapp.com'
-            };
-
-            return dbUserObj;
         }
     };
 
 // private method
 function genToken(user) {
-  var expires = expiresIn(7); // 7 days
-  var token = jwt.encode({
-    exp: expires
-  }, require('../config/secret')());
 
-  return {
-    token: token,
-    expires: expires,
-    user: user
-  };
+  var expires = expiresIn(7); // 7 days
+  jwt.sign({id: user.id, username: user.username, group: user.group_id},cert, function (err, token) {
+      return {token: token, expires: expires, user: user};
+  });
 }
 
 function expiresIn(numDays) {
   var dateObj = new Date();
   return dateObj.setDate(dateObj.getDate() + numDays);
 }
+
 return auth;
 };

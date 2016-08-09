@@ -32,7 +32,7 @@ if (req.method == 'OPTIONS') {
 }
 });
 app.use(express.static('static'));
-//app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
+app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
 app.use('/', require('./routes')(app.get('db')));
 // If no route is matched by now, it must be a 404
 app.use(function(req, res, next) {
