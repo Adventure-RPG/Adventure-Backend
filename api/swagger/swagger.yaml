@@ -1,0 +1,207 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Game Editor API
+  description: This API describes representing objects with GeoJson from PostGIS database.
+# during dev, should point to your local machine
+host: 127.0.0.1:10010
+# basePath prefixes all resource paths 
+basePath: /api/v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /points:
+    x-swagger-router-controller: points
+    get:
+      description: Get feature by point coordinates.
+      parameters:
+        - name: latitude
+          in: query
+          description: Latitude component of point.
+          required: true
+          type: number
+        - name: longitude
+          in: query
+          description: Longitude component of point.
+          required: true
+          type: number
+        - name: altitude
+          in: query
+          description: Altitude component of point.
+          required: true
+          type: number
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - Points
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Feature"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: Add new feature object.
+      parameters:
+        - name: geometry
+          in: body
+          schema:
+            $ref: "#/definitions/Feature"
+          required: true
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - Points
+      responses:
+        201:
+          description: OK
+          schema:
+            $ref: "#/definitions/Feature"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      description: Delete feature by id
+      responses:
+        200:
+          description: OK
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    
+  /locations:
+    get:
+      x-swagger-router-controller: locations
+      description: Returns all available features in box area
+      parameters:
+        - name: b_top
+          in: query
+          description: Top point of box.
+          required: true
+          type: number
+        - name: b_left
+          in: query
+          description: Left point of box.
+          required: true
+          type: number
+        - name: b_right
+          in: query
+          description: Right point of box.
+          required: true
+          type: number
+        - name: b_bottom
+          in: query
+          description: Bottom point of box.
+          required: true
+          type: number
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - Locations
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FeatureCollection"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  FeatureCollection:
+    type: object
+    required:
+      - type
+      - features
+    description: This is a collection of features. [GeoJson FeatureCollection] (http://geojson.org/geojson-spec.html#examples)
+    properties:
+      type:
+        type: string
+        default: FeatureCollection
+      features:
+        type: array
+        items:
+          $ref: "#/definitions/Feature"
+  Feature:
+    type: object
+    required:
+      - type
+      - geometry
+      - properties
+    description: Elementary objects with geometry properties.
+    properties:
+      type:
+        type: string
+        default: Feature
+      bbox:
+        type: array
+        items: {
+          type: integer,
+          format: int32
+        }
+        description: http://geojson.org/geojson-spec.html#bounding-boxes
+      geometry:
+        $ref: "#/definitions/Geometry"
+      properties:
+        type: array
+        items: {}
+        description: also here would be a feature id.
+  Geometry:
+    type: object
+    required:
+      - type
+      - coordinates
+    properties:
+      type:
+        type: string
+        default: Point
+        enum: [
+          Point,
+          LineString,
+          Polygon,
+          Multipoint,
+          MultiLineString,
+          MultiPolygon,
+          GeometryCollection
+        ]
+        description: "[GeoJSON geometries] (http://geojson.org/geojson-spec.html#geometry-objects)"
+      coordinates:
+        type: array
+        items: {
+          type: integer,
+          format: int32
+        }
+        description: x, y, z coordinates of geometry object
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
