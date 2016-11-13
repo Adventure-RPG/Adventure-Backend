@@ -4,7 +4,7 @@ info:
   title: Game Editor API
   description: This API describes representing objects with GeoJson from PostGIS database.
 # during dev, should point to your local machine
-host: game.iamborsch.ru
+host: 127.0.0.1:7999
 # basePath prefixes all resource paths 
 basePath: /api/v1
 # 
@@ -218,7 +218,10 @@ definitions:
         default: Feature
       bbox:
         type: array
-        items: {}
+        items: {
+          type: integer,
+          format: int32
+        }
         description: http://geojson.org/geojson-spec.html#bounding-boxes
       geometry:
         $ref: "#/definitions/Geometry"
@@ -252,7 +255,10 @@ definitions:
         description: "[GeoJSON geometries] (http://geojson.org/geojson-spec.html#geometry-objects)"
       coordinates:
         type: array
-        items: {}
+        items: {
+          type: integer,
+          format: int32
+        }
         description: x, y, z coordinates in array of geometry object. I can't describe all possible variations, so look at GeoJson docs.
   Error:
     type: object

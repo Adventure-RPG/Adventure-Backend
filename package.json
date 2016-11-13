@@ -17,6 +17,8 @@
   },
   "scripts": {
     "start": "node app.js",
+    "start-swagger": "swagger project start",
+    "start-mock": "swagger project start -m",
     "test": "swagger project test"
   }
 }

@@ -8,9 +8,9 @@ var db = require('../../config/db');
 module.exports = {createFeature, getFeatureByPoint, getFeatureById, updateFeature, delFeature};
 
 function getFeatureByPoint(req, res, next) {
-    var latitude = req.swagger.latitude.value;
-    var longitude = req.swagger.longitude.value;
-    var altitude = req.swagger.altitude.value;
+    var latitude = req.swagger.params.latitude.value;
+    var longitude = req.swagger.params.longitude.value;
+    var altitude = req.swagger.params.altitude.value;
 
     db.find(latitude, longitude, altitude, function (err, result) {
         if (err != null)
