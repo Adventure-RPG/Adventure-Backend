@@ -269,4 +269,4 @@ definitions:
       message:
         type: string
       fields:
-        type: string
+        type: object
