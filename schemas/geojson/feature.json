@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://json-schema.org/geojson/feature.json#",
+  "title": "Geo JSON feature object",
+  "description": "Schema for a Geo JSON feature object",
+  "type": "object",
+  "required": [ "type", "geometry", "properties" ],
+  "properties": {
+    "type": { "enum": [ "Feature" ] },
+    "geometry": { "$ref": "http://json-schema.org/geojson/geometry.json#" },
+    "properties": {
+      "type": "object",
+      "required": [ "name" ],
+      "properties":{
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

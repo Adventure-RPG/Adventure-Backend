@@ -1,0 +1,13 @@
+{
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-10, -10, 10], [10, -10, 10], [10, 10, 10], [-10, 10, 10]
+    ]]
+  },
+  "properties": {
+    "id": 32,
+    "name": "Dinagat Islands"
+  }
+}
