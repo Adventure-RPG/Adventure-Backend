@@ -7,13 +7,17 @@
   "required": [ "type", "geometry", "properties" ],
   "properties": {
     "type": { "enum": [ "Feature" ] },
-    "geometry": { "$ref": "http://json-schema.org/geojson/geometry.json#" },
+    "geometry": {
+      "oneOf": [
+        { "$ref": "http://json-schema.org/geojson/geometry.json#" }
+      ]
+    },
     "properties": {
       "type": "object",
       "required": [ "name" ],
       "properties":{
         "id": {
-          "type": "number"
+          "type": "integer"
         },
         "name": {
           "type": "string"

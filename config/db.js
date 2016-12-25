@@ -54,11 +54,13 @@ module.exports = function () {
             db.one("INSERT INTO points(name, geo) VALUES ($1::text, ST_GeomFromGeoJSON($2)) RETURNING id;",
                 [feature.properties.name, feature.geometry], point => point.id)
                 .then(data => {
-                    feature.null, properties.id = data;
-                    callback(data);
+                    feature.properties.id = parseInt(data);
+                    callback(null, feature);
                 })
                 .catch(error => {
                     console.log(error);
+                    if (error.code == '23505')
+                        return callback(new Error("Уже есть в базе."));
                     callback(error);
                 });
         },
@@ -66,8 +68,8 @@ module.exports = function () {
             db.one("UPDATE points SET geo = ST_GeomFromGeoJSON($1), name = $2::text WHERE id = $3;",
                 [feature.geometry, feature.properties.name, id], point => point.id)
                 .then(data => {
-                    feature.null, properties.id = data;
-                    callback(data);
+                    feature.properties.id = parseInt(data);
+                    callback(null, feature);
                 })
                 .catch(error => {
                     console.log(error);
@@ -76,7 +78,7 @@ module.exports = function () {
         },
 
         delete(id, callback){
-            db.result("DELETE * FROM points WHERE id=$1;", [id], r=r.rowCount)
+            db.result("DELETE FROM points WHERE id = $1;", [id], r => r.rowCount)
                 .then(data => {
                     callback(null, data);
                 })

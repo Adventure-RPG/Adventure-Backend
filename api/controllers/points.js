@@ -58,7 +58,7 @@ function updateFeature(req, res, next) {
     var validate = ajv.getSchema("http://json-schema.org/geojson/feature.json#");
     var valid = validate(req.body);
     if (!valid)
-        return next(validate.errors);
+        return next(validate.errors[0]);
     db.update(id, req.body, function (err, feat) {
         if (err)
             return next(err);
