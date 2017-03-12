@@ -1,0 +1,1 @@
+DROP EXTENSION postgis; DROP EXTENSION postgis_topology;

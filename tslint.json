@@ -1,0 +1,12 @@
+{
+    "extends": "tslint:latest",
+    "rules": {
+        "curly": true,
+        "interface-name": [true, "never-prefix"],
+        "variable-name": false,
+        "no-trailing-whitespace": false,
+        "prefer-const": false,
+        "max-classes-per-file": false,
+        "ordered-imports": false
+    }
+}
