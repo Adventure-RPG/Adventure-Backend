@@ -3,7 +3,7 @@ import {Feature} from "./Model";
 import {Storage} from "../game/Storage";
 import {Specification} from "../game/Specification";
 
-class FeatureRepository implements Repository<Feature> {
+export class FeatureRepository implements Repository<Feature> {
 
     constructor(private _storages: Array<Storage<Feature>>) {}
 

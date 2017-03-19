@@ -5,5 +5,5 @@ export interface Repository<T extends Identifiable> {
     add(t: T): void;
     remove(t: T): void;
     update(t: T): void;
-    query(spec: Specification<T>): T[];
+    query(spec: Specification<T>): Promise<T[]>;
 }

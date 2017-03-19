@@ -11,7 +11,7 @@ abstract class BySQLSpecification implements SQLSpecification<Feature> {
 
 }
 
-class ByIdSpecification extends BySQLSpecification implements SQLSpecification<Feature> {
+export class ByIdSpecification extends BySQLSpecification implements SQLSpecification<Feature> {
 
     constructor(private _id) { super(); }
 
@@ -24,7 +24,7 @@ class ByIdSpecification extends BySQLSpecification implements SQLSpecification<F
     }
 }
 
-class ByPointSpecification extends BySQLSpecification implements SQLSpecification<Feature> {
+export class ByPointSpecification extends BySQLSpecification implements SQLSpecification<Feature> {
     constructor(private _latitude: number, private _longitude: number, private _altitude: number) { super(); }
 
     public specified(feature) {
@@ -37,7 +37,7 @@ class ByPointSpecification extends BySQLSpecification implements SQLSpecificatio
     }
 }
 
-class BySquareSpecification extends BySQLSpecification implements SQLSpecification<Feature> {
+export class BySquareSpecification extends BySQLSpecification implements SQLSpecification<Feature> {
     constructor(private _top, private _left, private _right, private _bottom) { super(); }
 
     public specified(feature): boolean {

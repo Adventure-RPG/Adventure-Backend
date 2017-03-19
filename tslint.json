@@ -3,10 +3,15 @@
     "rules": {
         "curly": true,
         "interface-name": [true, "never-prefix"],
+        "whitespace": false,
+        "arrow-parens": false,
+        "member-access": false,
         "variable-name": false,
         "no-trailing-whitespace": false,
         "prefer-const": false,
         "max-classes-per-file": false,
-        "ordered-imports": false
+        "ordered-imports": false,
+        "only-arrow-functions": false,
+        "ban-types": false
     }
 }

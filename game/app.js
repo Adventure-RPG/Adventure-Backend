@@ -1,35 +1,11 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
+import { Server } from "typescript-rest";
 import * as express from "express";
-import { GET, Path, PathParam, Server } from "typescript-rest";
-let HelloService = class HelloService {
-    sayHello(name) {
-        return "Hello " + name;
-    }
-};
-__decorate([
-    Path(":name"),
-    GET,
-    __param(0, PathParam("name")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", String)
-], HelloService.prototype, "sayHello", null);
-HelloService = __decorate([
-    Path("/hello")
-], HelloService);
+import * as winston from "winston";
+import { FeatureService } from "../features/Services";
 const app = express();
 Server.buildServices(app);
+const featureService = new FeatureService();
 app.listen(3000, function () {
-    console.log("Rest Server listening on port 3000!");
+    winston.info("Rest Server listening on port 3000!");
 });
+//# sourceMappingURL=app.js.map

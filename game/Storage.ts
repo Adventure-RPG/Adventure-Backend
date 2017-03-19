@@ -3,7 +3,7 @@ import {Specification} from "./Specification";
 
 export interface Storage<T extends Identifiable> {
     persist(T): void;
-    retrieve(spec: Specification<T>): T[];
+    retrieve(spec: Specification<T>): Promise<T[]>;
     modify(T): void;
     delete(T): void;
 }

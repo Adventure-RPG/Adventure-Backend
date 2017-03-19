@@ -1,14 +1,11 @@
-import {Server, Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context} from "typescript-rest";
-import {Feature} from "../features/Model";
-import {AuthRequired} from "./Authentication";
-import {factory} from "../features/Factory";
-import {ByIdSpecification} from "../features/Specifications";
-import * as express from "express";
-import * as winston from "winston";
-
+import {Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context} from "typescript-rest";
+import {Feature} from "./Model";
+import {AuthRequired} from "../game/Authentication";
+import {factory} from "./Factory";
+import {ByIdSpecification} from "./Specifications";
 
 @Path("points")
-class FeatureService {
+export class FeatureService {
     @Context
     context: ServiceContext;
 
@@ -36,11 +33,3 @@ class FeatureService {
         return factory.repository.remove(new Feature(body.properties.name, body.geometry, id));
     }
 }
-
-
-const app: express.Application = express();
-Server.buildServices(app);
-
-app.listen(3000, function() {
-    winston.info("Rest Server listening on port 3000!");
-});

@@ -2,8 +2,9 @@ import {Feature} from "./Model";
 import {Storage} from "../game/Storage";
 import {Pool} from "pg";
 import {SQLSpecification} from "../game/Specification";
+import * as winston from "winston";
 
-class FeatureSQLStorage implements Storage<Feature> {
+export class FeatureSQLStorage implements Storage<Feature> {
     constructor(private _pool: Pool) {}
 
     public persist(feature): void {
@@ -13,20 +14,18 @@ class FeatureSQLStorage implements Storage<Feature> {
                 client.release();
                 feature.id = id;
             }).catch((err) => {
-                console.error("Error running query.", err);
+                winston.error("Error running query.", err);
             });
         }).catch((err) => {
-            console.error("Error fetching client from pool", err);
+            winston.error("Error fetching client from pool", err);
         });
     }
 
-    public retrieve(spec: SQLSpecification<Feature>): Feature[] {
-        this._pool.connect().then((client) => {
-            client.query("SELECT ST_AsGeoJSON(lg.geo)::json As geometry, row_to_json(lp) " +
-                "As properties FROM points As lg INNER JOIN (SELECT id, name from points) As lp ON lg.id = lp.id "
-                + spec.toSqlClause()).then((res) => {
+    public retrieve(spec: SQLSpecification<Feature>): Promise<Feature[]> {
+        let features = Array<Feature>();
+        return this._pool.connect().then((client) => {
+            client.query(spec.toSqlClause()).then((res) => {
                 client.release();
-                let features = Array<Feature>();
                 if (res.rowCount > 0) {
                     for (let row of res.rows) {
                         features.push(new Feature(row.properties.name, row.geometry, row.properties.id));
@@ -34,10 +33,12 @@ class FeatureSQLStorage implements Storage<Feature> {
                 }
                 return features;
             }).catch((err) => {
-                console.error("Error running query.", err);
+                winston.error("Error running query.", err);
+                return features;
             });
         }).catch((err) => {
-            console.error("Error fetching client from pool", err);
+            winston.error("Error fetching client from pool", err);
+            return features;
         });
     }
 
@@ -47,10 +48,10 @@ class FeatureSQLStorage implements Storage<Feature> {
                 [feature.geo, feature.name, feature.id]).then(() => {
                 client.release();
             }).catch((err) => {
-                console.error("Error running query.", err);
+                winston.error("Error running query.", err);
             });
         }).catch((err) => {
-            console.error("Error fetching client from pool", err);
+            winston.error("Error fetching client from pool", err);
         });
     }
 
@@ -59,10 +60,10 @@ class FeatureSQLStorage implements Storage<Feature> {
             client.query("DELETE FROM points WHERE id = $1;", [feature.id]).then(() => {
                 client.release();
             }).catch((err) => {
-                console.error("Error running query.", err);
+                winston.error("Error running query.", err);
             });
         }).catch((err) => {
-            console.error("Error fetching client from pool", err);
+            winston.error("Error fetching client from pool", err);
         });
     }
 }
