@@ -1,10 +1,9 @@
 import {Server, Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context} from "typescript-rest";
-import {Feature} from "../features/Model";
 import {AuthRequired} from "./Authentication";
 import {factory} from "../features/Factory";
+import {Feature} from "../features/Model";
 import {ByIdSpecification} from "../features/Specifications";
 import * as express from "express";
-import * as winston from "winston";
 
 
 @Path("points")
@@ -42,5 +41,5 @@ const app: express.Application = express();
 Server.buildServices(app);
 
 app.listen(3000, function() {
-    winston.info("Rest Server listening on port 3000!");
+    console.info("Rest Server listening on port 3000!");
 });
