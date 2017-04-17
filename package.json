@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "db-migrate up --config=config/db.json -e prod"
+    "migrate": "db-migrate up --config=config/db.json -e prod",
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ts-node ./game/app.ts"
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,12 @@
   },
   "devDependencies": {
     "@types/express": "^4.0.35",
-    "@types/node": "^7.0.8",
-    "tslint": "^4.5.1"
+    "@types/node": "^7.0.12",
+    "debug": "^2.6.3",
+    "nodemon": "^1.11.0",
+    "ts-json-properties": "^1.1.5",
+    "ts-node": "^3.0.2",
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.2"
   }
 }

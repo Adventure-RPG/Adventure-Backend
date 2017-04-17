@@ -1,0 +1,15 @@
+{
+  "product":"adventure-auth",
+
+  "config": {
+    "db": "/config/db.json"
+  },
+
+  "propertiesFiles":{
+    "cwd":"./config",
+    "files":{
+      "db": "db.json"
+    }
+  }
+
+}
