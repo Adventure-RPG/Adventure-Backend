@@ -6,6 +6,7 @@ import {BySQLSpecification, ByIdSpecification} from "../features/Specifications"
 import * as express from "express";
 import * as winston from "winston";
 import {Properties} from 'ts-json-properties';
+import {GeoFeatureList} from "../geojson/models";
 
 /**
  * Initialize some lib
@@ -23,19 +24,18 @@ class FeatureService {
     context: ServiceContext;
 
     @GET
-    getFeatures(): Promise<Feature> {
+    getFeatures(): Promise<GeoFeatureList<Feature>> {
         return factory.repository.query(new BySQLSpecification());
     }
 
     @Path(":id")
     @GET
-    getFeature(@PathParam("id") id: number): Promise<Feature> {
+    getFeature(@PathParam("id") id: number): Promise<GeoFeatureList<Feature>> {
         return factory.repository.query(new ByIdSpecification(id));
     }
 
     @POST
     addFeature(body) {
-        console.log(body);
         return factory.repository.add(new Feature(body.properties.name, body.geometry));
     }
 

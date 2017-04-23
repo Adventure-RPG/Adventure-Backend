@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["es2015"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",

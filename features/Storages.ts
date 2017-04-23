@@ -3,6 +3,7 @@ import {Storage} from "../game/Storage";
 import {Pool} from "pg";
 import {SQLSpecification} from "../game/Specification";
 import * as winston from "winston";
+import {GeoFeature, GeoFeatureList} from "../geojson/models";
 
 export class FeatureSQLStorage implements Storage<Feature> {
     constructor(private _pool: Pool) {}
@@ -21,25 +22,25 @@ export class FeatureSQLStorage implements Storage<Feature> {
         });
     }
 
-    public retrieve(spec: SQLSpecification<Feature>): Promise<Feature[]> {
-        let features = Array<Feature>();
-        return this._pool.connect().then((client) => {
-            client.query(spec.toSqlClause()).then((res) => {
+    public async retrieve(spec: SQLSpecification<Feature>): Promise<GeoFeatureList<Feature>> {
+        let features: GeoFeatureList<Feature> = [];
+        try {
+            let client = await this._pool.connect();
+            try {
+                let res = await client.query(spec.toSqlClause());
                 client.release();
                 if (res.rowCount > 0) {
                     for (let row of res.rows) {
-                        features.push(new Feature(row.properties.name, row.geometry, row.properties.id));
+                        features.push(new Feature(row.properties.name, row.geometry, row.properties.id).toGeoJson());
                     }
                 }
                 return features;
-            }).catch((err) => {
-                winston.error("Error running query.", err);
-                return features;
-            });
-        }).catch((err) => {
-            winston.error("Error fetching client from pool", err);
-            return features;
-        });
+            } catch (err) {
+                console.error(err);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     public modify(feature): void {

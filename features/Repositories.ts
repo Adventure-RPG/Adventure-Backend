@@ -2,6 +2,7 @@ import {Repository} from "../game/Repository";
 import {Feature} from "./Model";
 import {Storage} from "../game/Storage";
 import {Specification} from "../game/Specification";
+import {GeoFeature, GeoFeatureList} from "../geojson/models";
 
 export class FeatureRepository implements Repository<Feature> {
 
@@ -22,7 +23,7 @@ export class FeatureRepository implements Repository<Feature> {
             storage.modify(feature);
         }
     }
-    public query(spec: Specification<Feature>) {
+    public query(spec: Specification<Feature>): Promise<GeoFeatureList<Feature>> {
         for (let storage of this._storages) {
             let features = storage.retrieve(spec);
             if (features) {

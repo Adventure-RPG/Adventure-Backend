@@ -1,4 +1,5 @@
 import {Model} from "../game/Model";
+import {GeoFeature} from "../geojson/models";
 
 export class Feature extends Model {
 
@@ -21,5 +22,15 @@ export class Feature extends Model {
 
     public inSquare(top, left, right, bottom): boolean {
         return undefined;
+    }
+    public toGeoJson(): GeoFeature<Feature> {
+        return {
+            type: "Feature",
+            geometry: this.geo,
+            properties: {
+                id: this.id,
+                name: this.name
+            }
+        }
     }
 }
