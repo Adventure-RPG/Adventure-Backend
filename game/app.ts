@@ -12,6 +12,11 @@ import {Properties} from 'ts-json-properties';
  */
 Properties.initialize();
 
+
+/**
+ * Rest methods from backend
+ */
+
 @Path("points")
 class FeatureService {
     @Context
