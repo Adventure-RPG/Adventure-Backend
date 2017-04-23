@@ -20,7 +20,7 @@ export class ByIdSpecification extends BySQLSpecification implements SQLSpecific
     }
 
     public toSqlClause() {
-        return super.toSqlClause() + "WHERE lg.id = ${this._id};";
+        return super.toSqlClause() + `WHERE lg.id = ${this._id}`;
     }
 }
 
@@ -32,8 +32,8 @@ export class ByPointSpecification extends BySQLSpecification implements SQLSpeci
     }
 
     public toSqlClause() {
-        return super.toSqlClause() + " WHERE ST_Contains(lg.geo, " +
-            "ST_GeomFromText('POINT(${this._latitude} ${this._longitude} $(this._altitude})');";
+        return super.toSqlClause() + ` WHERE ST_Contains(lg.geo, 
+        ST_GeomFromText(\'POINT(${this._latitude} ${this._longitude} ${this._altitude} )\')`;
     }
 }
 
@@ -44,7 +44,7 @@ export class BySquareSpecification extends BySQLSpecification implements SQLSpec
         return feature.inSquare(this._top, this._left, this._right, this._bottom);
     }
     public toSqlClause() {
-        return super.toSqlClause() + " WHERE lg.geo && " +
-            "BOX3D(${this._top}, ${this._left}, ${this._right}, ${this._bottom})::box3d);";
+        return super.toSqlClause() + ` WHERE lg.geo && 
+        BOX3D(${this._top}, ${this._left}, ${this._right}, ${this._bottom})::box3d)`;
     }
 }

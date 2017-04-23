@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "db-migrate up --config=config/db.json -e prod",
-    "start": "npm run build:live",
-    "build:live": "nodemon --exec ts-node ./game/app.ts"
+    "start": "npm run build:live:tsnode",
+    "build:live:tsnode": "ts-node game/app.ts",
+    "build:live:nodemon": "nodemon --exec ts-node ./game/app.ts"
   },
   "repository": {
     "type": "git",

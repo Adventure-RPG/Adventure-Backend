@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "baseUrl": ".",
-    "sourceMap": true,
-    "inlineSources": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
