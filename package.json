@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "npm install",
+
     "migrate": "db-migrate up --config=config/db.json -e dev",
+
     "start": "npm run build:live:tsnode",
+
     "build:live:tsnode": "ts-node game/app.ts",
     "build:live:nodemon": "nodemon --exec ts-node ./game/app.ts"
   },

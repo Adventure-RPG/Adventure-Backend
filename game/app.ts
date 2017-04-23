@@ -1,57 +1,28 @@
-import {Server, Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context} from "typescript-rest";
-import {AuthRequired} from "./Authentication";
-import {factory} from "../features/Factory";
-import {Feature} from "../features/Model";
-import {BySQLSpecification, ByIdSpecification} from "../features/Specifications";
+import {Server} from "typescript-rest";
 import * as express from "express";
 import * as winston from "winston";
 import {Properties} from 'ts-json-properties';
-import {GeoFeatureList} from "../geojson/models";
+import {FeatureController} from "../features/Services";
 
 /**
  * Initialize some lib
  */
 Properties.initialize();
 
-
 /**
- * Rest methods from backend
+ * Rest controllers from backend
  */
 
-@Path("/points")
-class FeatureService {
-    @Context
-    context: ServiceContext;
+const Controllers:any = [
+    FeatureController
+];
 
-    @GET
-    getFeatures(): Promise<GeoFeatureList<Feature>> {
-        return factory.repository.query(new BySQLSpecification());
-    }
+Controllers.map( service => new service());
 
-    @Path(":id")
-    @GET
-    getFeature(@PathParam("id") id: number): Promise<GeoFeatureList<Feature>> {
-        return factory.repository.query(new ByIdSpecification(id));
-    }
-
-    @POST
-    addFeature(body) {
-        return factory.repository.add(new Feature(body.properties.name, body.geometry));
-    }
-
-    @Path(":id")
-    @PUT
-    modifyFeature(body) {
-        return factory.repository.update(new Feature(body.properties.name, body.geometry));
-    }
-
-    @Path(":id")
-    @DELETE
-    deleteFeature(@PathParam("id") id: number, body) {
-        return factory.repository.remove(new Feature(body.properties.name, body.geometry, id));
-    }
-}
-
+/**
+ * build express application
+ * @type {Express}
+ */
 
 const app: express.Application = express();
 Server.buildServices(app);

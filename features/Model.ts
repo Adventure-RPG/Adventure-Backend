@@ -4,7 +4,7 @@ import {GeoFeature} from "../geojson/models";
 export class Feature extends Model {
 
     // todo: make geo type to a class with JsonSchema
-    constructor(private _name: string, private _geo: any, id?) {
+    constructor(private _name?: string, private _geo?: any, id?) {
         super(id);
     }
 

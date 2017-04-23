@@ -8,18 +8,21 @@ import {GeoFeature, GeoFeatureList} from "../geojson/models";
 export class FeatureSQLStorage implements Storage<Feature> {
     constructor(private _pool: Pool) {}
 
-    public persist(feature): void {
-        this._pool.connect().then((client) => {
-            client.query("INSERT INTO points(name, geo) VALUES ($1::text, " +
-                "ST_GeomFromGeoJSON($2)) RETURNING id;", [feature.name, feature.geo]).then((id) => {
+    public async persist(feature) {
+        try {
+            let client = await this._pool.connect();
+            try {
+                let res = await client.query(`INSERT INTO points(name, geo) VALUES 
+                ($1::text, ST_GeomFromGeoJSON($2)) RETURNING id;`, [feature.name, feature.geo])
                 client.release();
-                feature.id = id;
-            }).catch((err) => {
-                winston.error("Error running query.", err);
-            });
-        }).catch((err) => {
+                console.log(res);
+                return res;
+            } catch(err) {
+                winston.error("Error fetching client from pool", err);
+            }
+        } catch (err){
             winston.error("Error fetching client from pool", err);
-        });
+        }
     }
 
     public async retrieve(spec: SQLSpecification<Feature>): Promise<GeoFeatureList<Feature>> {
@@ -43,11 +46,12 @@ export class FeatureSQLStorage implements Storage<Feature> {
         }
     }
 
-    public modify(feature): void {
+    public async modify(feature) {
         this._pool.connect().then((client) => {
             client.query("UPDATE points SET geo = ST_GeomFromGeoJSON($1), name = $2::text WHERE id = $3;",
                 [feature.geo, feature.name, feature.id]).then(() => {
                 client.release();
+                return feature;
             }).catch((err) => {
                 winston.error("Error running query.", err);
             });
