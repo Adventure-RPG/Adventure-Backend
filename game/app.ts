@@ -4,7 +4,18 @@ import {factory} from "../features/Factory";
 import {Feature} from "../features/Model";
 import {ByIdSpecification} from "../features/Specifications";
 import * as express from "express";
+import * as winston from "winston";
+import {Properties} from 'ts-json-properties';
 
+/**
+ * Initialize some lib
+ */
+Properties.initialize();
+
+
+/**
+ * Rest methods from backend
+ */
 
 @Path("points")
 class FeatureService {
