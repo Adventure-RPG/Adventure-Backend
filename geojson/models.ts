@@ -13,7 +13,4 @@ export interface GeoFeature<T extends Identifiable> {
     };
 }
 
-export interface GeoFeatureList<T extends Identifiable> extends GeoFeature<T> {
-    readonly [index: number]: GeoFeature<T>;
-}
-
+export interface GeoFeatureList<T extends Identifiable> extends Array<GeoFeature<T>> { }
