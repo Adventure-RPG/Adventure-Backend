@@ -1,8 +1,11 @@
 import {SQLSpecification} from "../game/Specification";
 import {Feature} from "./Model";
 
-abstract class BySQLSpecification implements SQLSpecification<Feature> {
-    public abstract specified(T): boolean
+export class BySQLSpecification implements SQLSpecification<Feature> {
+
+    public specified(feature) {
+        return true;
+    }
 
     public toSqlClause(): string {
         return "SELECT ST_AsGeoJSON(lg.geo)::json As geometry, row_to_json(lp) As properties FROM points As lg " +

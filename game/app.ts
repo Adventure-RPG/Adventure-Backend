@@ -2,7 +2,7 @@ import {Server, Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context
 import {AuthRequired} from "./Authentication";
 import {factory} from "../features/Factory";
 import {Feature} from "../features/Model";
-import {ByIdSpecification} from "../features/Specifications";
+import {BySQLSpecification, ByIdSpecification} from "../features/Specifications";
 import * as express from "express";
 import * as winston from "winston";
 import {Properties} from 'ts-json-properties';
@@ -17,10 +17,15 @@ Properties.initialize();
  * Rest methods from backend
  */
 
-@Path("points")
+@Path("/points")
 class FeatureService {
     @Context
     context: ServiceContext;
+
+    @GET
+    getFeatures(): Promise<Feature> {
+        return factory.repository.query(new BySQLSpecification());
+    }
 
     @Path(":id")
     @GET
@@ -28,19 +33,20 @@ class FeatureService {
         return factory.repository.query(new ByIdSpecification(id));
     }
 
-    @AuthRequired @POST
+    @POST
     addFeature(body) {
+        console.log(body);
         return factory.repository.add(new Feature(body.properties.name, body.geometry));
     }
 
     @Path(":id")
-    @AuthRequired @PUT
+    @PUT
     modifyFeature(body) {
         return factory.repository.update(new Feature(body.properties.name, body.geometry));
     }
 
     @Path(":id")
-    @AuthRequired @DELETE
+    @DELETE
     deleteFeature(@PathParam("id") id: number, body) {
         return factory.repository.remove(new Feature(body.properties.name, body.geometry, id));
     }
