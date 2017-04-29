@@ -1,9 +1,10 @@
 import {Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context} from "typescript-rest";
-import {Feature} from "./Model";
+import {Feature, FeatureInteface} from "./Model";
 import {AuthRequired} from "../game/Authentication";
 import {factory} from "./Factory";
 import {ByIdSpecification, BySQLSpecification} from "./Specifications";
 import {GeoFeatureList} from "../geojson/models";
+import {Identifiable} from "../game/Model";
 
 /**
  * controller Feature
@@ -55,13 +56,15 @@ export class FeatureController {
 
     @POST
     addFeature(body) {
-        return factory.repository.add(new Feature(body.properties.name, body.geometry));
+        let obj: FeatureInteface = {_name: body.properties.name, _geo: body.geometry};
+        return factory.repository.add(new Feature(obj));
     }
 
     @Path(":id")
     @PUT
     modifyFeature(@PathParam("id") id: number, body) {
-        return factory.repository.update(new Feature(body.properties.name, body.geometry, id));
+        let obj: FeatureInteface = {_name: body.properties.name, _geo: body.geometry, _id: id};
+        return factory.repository.update(new Feature(obj));
     }
 
     @Path(":id")
@@ -69,6 +72,6 @@ export class FeatureController {
     deleteFeature(@PathParam("id") id: number) {
         //TODO: Хоть и урод, но работает.
         //TODO: https://github.com/Microsoft/TypeScript/issues/467 - виноваты они, честно.
-        return factory.repository.remove(new Feature(undefined, undefined, id));
+        return factory.repository.remove(new Feature({_id: id}));
     }
 }

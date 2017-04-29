@@ -12,6 +12,7 @@
         "max-classes-per-file": false,
         "ordered-imports": false,
         "only-arrow-functions": false,
-        "ban-types": false
+        "ban-types": false,
+        "max-line-length": false
     }
 }

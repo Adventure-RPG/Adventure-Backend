@@ -1,11 +1,22 @@
-import {Model} from "../game/Model";
+import {Model, Identifiable} from "../game/Model";
 import {GeoFeature} from "../geojson/models";
 
+export interface FeatureInteface extends Identifiable {
+    _name: string;
+    _geo: any;
+}
+
 export class Feature extends Model {
+    private _name: string;
+    private _geo: any;
+
+    constructor(id?: Identifiable)
 
     // todo: make geo type to a class with JsonSchema
-    constructor(private _name?: string, private _geo?: any, id?) {
-        super(id);
+    constructor(data: FeatureInteface) {
+        super(data._id);
+        this._name = data._name;
+        this._geo = data._geo;
     }
 
     public get name(){

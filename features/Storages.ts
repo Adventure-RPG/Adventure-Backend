@@ -1,4 +1,4 @@
-import {Feature} from "./Model";
+import {Feature, FeatureInteface} from "./Model";
 import {Storage} from "../game/Storage";
 import {Pool} from "pg";
 import {SQLSpecification} from "../game/Specification";
@@ -15,7 +15,6 @@ export class FeatureSQLStorage implements Storage<Feature> {
                 let res = await client.query(`INSERT INTO points(name, geo) VALUES 
                 ($1::text, ST_GeomFromGeoJSON($2)) RETURNING id;`, [feature.name, feature.geo])
                 client.release();
-                console.log(res);
                 return res;
             } catch(err) {
                 winston.error("Error fetching client from pool", err);
@@ -34,7 +33,8 @@ export class FeatureSQLStorage implements Storage<Feature> {
                 client.release();
                 if (res.rowCount > 0) {
                     for (let row of res.rows) {
-                        features.push(new Feature(row.properties.name, row.geometry, row.properties.id).toGeoJson());
+                        let obj: FeatureInteface = {_name: row.properties.name, _geo: row.geometry, _id: row.properties.id};
+                        features.push(new Feature(obj).toGeoJson());
                     }
                 }
                 return features;
