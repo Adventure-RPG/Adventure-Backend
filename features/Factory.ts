@@ -10,6 +10,7 @@ class FeatureFactory {
     private dbJson:any;
 
     constructor() {
+        console.log(this.dbJson);
         let config = Properties.getValue("db");
 
         this._rep = new FeatureRepository([new FeatureSQLStorage(new pg.Pool(config.dev))]);

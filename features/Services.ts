@@ -1,10 +1,11 @@
-import {Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context} from "typescript-rest";
-import {Feature, FeatureInteface} from "./Model";
+import {Path, GET, PathParam, POST, PUT, DELETE, ServiceContext, Context, Errors} from "typescript-rest";
+import {Feature} from "./Model";
 import {AuthRequired} from "../game/Authentication";
 import {factory} from "./Factory";
 import {ByIdSpecification, BySQLSpecification} from "./Specifications";
 import {GeoFeatureList} from "../geojson/models";
 import {Identifiable} from "../game/Model";
+import {validator} from "../game/Factory";
 
 /**
  * controller Feature
@@ -13,11 +14,12 @@ import {Identifiable} from "../game/Model";
 //TODO: написать докеоратор для контролеров используя декоратор пути.
 @Path("/points")
 export class FeatureController {
+
     @Context
     context: ServiceContext;
 
     @GET
-    getFeatures(): Promise<GeoFeatureList<Feature>> {
+    getFeatures(): Promise<GeoFeatureList> {
         let promise = factory.repository.query(new BySQLSpecification()).then(
             resolve=>{
                 return resolve;
@@ -32,10 +34,10 @@ export class FeatureController {
 
     @Path(":id")
     @GET
-    getFeature(@PathParam("id") id: number): Promise<GeoFeatureList<Feature>> {
+    getFeature(@PathParam("id") id: number): Promise<GeoFeatureList> {
         let promise = factory.repository.query(new ByIdSpecification(id)).then(
-            resolve=>{
-                if (resolve && resolve.length){
+            resolve=> {
+                if (resolve && resolve.length) {
                     return resolve[0]
                 }
                 return new Promise((resolve, reject)=>{
@@ -56,22 +58,25 @@ export class FeatureController {
 
     @POST
     addFeature(body) {
-        let obj: FeatureInteface = {_name: body.properties.name, _geo: body.geometry};
-        return factory.repository.add(new Feature(obj));
+        if (!validator.validate(body)) {
+            throw new Errors.BadRequestError();
+        }
+        return factory.repository.add(new Feature(body));
     }
 
     @Path(":id")
     @PUT
     modifyFeature(@PathParam("id") id: number, body) {
-        let obj: FeatureInteface = {_name: body.properties.name, _geo: body.geometry, _id: id};
-        return factory.repository.update(new Feature(obj));
+        if (!validator.validate(body)) {
+            throw new Errors.BadRequestError();
+        }
+        body.properties.id = id;
+        return factory.repository.update(new Feature(body));
     }
 
     @Path(":id")
     @DELETE
     deleteFeature(@PathParam("id") id: number) {
-        //TODO: Хоть и урод, но работает.
-        //TODO: https://github.com/Microsoft/TypeScript/issues/467 - виноваты они, честно.
-        return factory.repository.remove(new Feature({_id: id}));
+        return factory.repository.remove(new Feature(id));
     }
 }

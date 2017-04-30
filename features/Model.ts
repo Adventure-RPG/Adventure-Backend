@@ -1,22 +1,23 @@
-import {Model, Identifiable} from "../game/Model";
-import {GeoFeature} from "../geojson/models";
+import {Model, Identifiable, isIdentifiable} from "../game/Model";
+import {GeoFeature, isGeoFeature} from "../geojson/models";
 
-export interface FeatureInteface extends Identifiable {
-    _name: string;
-    _geo: any;
-}
 
 export class Feature extends Model {
     private _name: string;
     private _geo: any;
 
-    constructor(id?: Identifiable)
+    constructor(_id?: Identifiable);
 
-    // todo: make geo type to a class with JsonSchema
-    constructor(data: FeatureInteface) {
-        super(data._id);
-        this._name = data._name;
-        this._geo = data._geo;
+    constructor(data: GeoFeature);
+
+    constructor(obj: any) {
+        if (isIdentifiable(obj)) {
+            super(obj);
+        } else if (isGeoFeature(obj)) {
+            super(obj.properties.id);
+            this._name = obj.properties.name;
+            this._geo = obj.geometry;
+        }
     }
 
     public get name(){
@@ -34,14 +35,14 @@ export class Feature extends Model {
     public inSquare(top, left, right, bottom): boolean {
         return undefined;
     }
-    public toGeoJson(): GeoFeature<Feature> {
+    public toGeoJson(): GeoFeature {
         return {
             type: "Feature",
             geometry: this.geo,
             properties: {
                 id: this.id,
-                name: this.name
-            }
-        }
+                name: this.name,
+            },
+        };
     }
 }

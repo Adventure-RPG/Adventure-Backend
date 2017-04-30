@@ -8,7 +8,7 @@ export class BySQLSpecification implements SQLSpecification<Feature> {
     }
 
     public toSqlClause(): string {
-        return "SELECT ST_AsGeoJSON(lg.geo)::json As geometry, row_to_json(lp) As properties FROM points As lg " +
+        return "SELECT 'Feature' As type, ST_AsGeoJSON(lg.geo)::json As geometry, row_to_json(lp) As properties FROM points As lg " +
             "INNER JOIN (SELECT id, name from points) As lp ON lg.id = lp.id ";
     }
 

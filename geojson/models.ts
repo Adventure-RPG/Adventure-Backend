@@ -1,16 +1,18 @@
 import {Identifiable} from "../game/Model";
-import {Feature} from "../features/Model";
+import * as geojson from "geojson";
 /**
  * Created by GolemXIV on 23.04.2017.
  */
-export interface GeoFeature<T extends Identifiable> {
-    type: string;
-    geometry: any;
 
+export interface GeoFeature extends geojson.Feature<geojson.GeometryObject> {
     properties: {
-        id?: number,
+        id?: Identifiable,
         name: string,
     };
 }
 
-export interface GeoFeatureList<T extends Identifiable> extends Array<GeoFeature<T>> { }
+export function isGeoFeature(obj: any): obj is GeoFeature {
+    return "type" in obj;
+}
+
+export interface GeoFeatureList extends Array<GeoFeature> { }
