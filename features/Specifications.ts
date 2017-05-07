@@ -36,7 +36,7 @@ export class ByPointSpecification extends BySQLSpecification implements SQLSpeci
 
     public toSqlClause() {
         return super.toSqlClause() + ` WHERE ST_Contains(lg.geo, 
-        ST_GeomFromText(\'POINT(${this._latitude} ${this._longitude} ${this._altitude} )\')`;
+        ST_GeomFromText(\'POINT(${this._latitude} ${this._longitude} ${this._altitude})\'))`;
     }
 }
 
@@ -48,6 +48,6 @@ export class BySquareSpecification extends BySQLSpecification implements SQLSpec
     }
     public toSqlClause() {
         return super.toSqlClause() + ` WHERE lg.geo && 
-        BOX3D(${this._top}, ${this._left}, ${this._right}, ${this._bottom})::box3d)`;
+        ST_MakeEnvelope(${this._left}, ${this._bottom}, ${this._right}, ${this._top})`;
     }
 }
