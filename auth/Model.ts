@@ -3,6 +3,7 @@ import {Model, Identifiable, isIdentifiable} from "../game/Model";
 export class User extends Model {
     private _username: string;
     private _email: string;
+    private _password: string;
     private _is_active: boolean;
 
     constructor(_id?: Identifiable);
@@ -40,5 +41,13 @@ export class User extends Model {
 
     set is_active(value: boolean) {
         this._is_active = value;
+    }
+
+    get password(): string {
+        return this._password;
+    }
+
+    set password(value: string) {
+        this._password = value;
     }
 }

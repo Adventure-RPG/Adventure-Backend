@@ -14,9 +14,13 @@ import {authService} from "./Auth";
 export class UserService {
     @POST
     @Path("/login")
-    login(body): Observable<string> {
+    login(body): Promise<string> {
         if (body.email && body.password) {
-            return authService.createToken(body.email);
+            return authService.createToken(body.email).then(resolve => {
+                return resolve;
+            }, reject => {
+                throw new Errors.UnauthorizedError();
+            });
         }
     }
 }
