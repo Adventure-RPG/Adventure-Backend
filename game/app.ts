@@ -3,6 +3,7 @@ import * as express from "express";
 import * as winston from "winston";
 import {Properties} from 'ts-json-properties';
 import {FeatureController} from "../features/Services";
+import {UserService} from "../auth/Services";
 
 /**
  * Initialize some lib
@@ -14,7 +15,8 @@ Properties.initialize();
  */
 
 const Controllers:any = [
-    FeatureController
+    FeatureController,
+    UserService,
 ];
 
 Controllers.map( service => new service());

@@ -3,19 +3,20 @@
  */
 import {Path, GET, PathParam, QueryParam, POST, PUT, DELETE, ServiceContext, Context, Errors} from "typescript-rest";
 import {User} from "./Model";
+import {Observable} from "rxjs";
 import {GeoFeatureList} from "../geojson/models";
 import {Identifiable} from "../game/Model";
 import {validator} from "../game/Factory";
 import {} from "jsonwebtoken";
+import {authService} from "./Auth";
 
 @Path("/users")
 export class UserService {
     @POST
     @Path("/login")
-    login(body) {
+    login(body): Observable<string> {
         if (body.email && body.password) {
-
+            return authService.createToken(body.email);
         }
-
     }
 }
