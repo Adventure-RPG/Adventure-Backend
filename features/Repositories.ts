@@ -23,7 +23,7 @@ export class FeatureRepository implements Repository<Feature> {
             storage.modify(feature);
         }
     }
-    public query(spec: Specification<Feature>): Promise<GeoFeatureList<Feature>> {
+    public query(spec: Specification<Feature>): Promise<GeoFeatureList> {
         for (let storage of this._storages) {
             let features = storage.retrieve(spec);
             if (features) {

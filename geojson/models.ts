@@ -15,4 +15,6 @@ export function isGeoFeature(obj: any): obj is GeoFeature {
     return "type" in obj;
 }
 
-export interface GeoFeatureList extends Array<GeoFeature> { }
+export interface GeoFeatureList extends geojson.FeatureCollection<geojson.GeometryObject> {
+    properties?: {};
+}

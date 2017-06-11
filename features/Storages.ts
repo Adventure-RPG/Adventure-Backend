@@ -25,7 +25,7 @@ export class FeatureSQLStorage implements Storage<Feature> {
     }
 
     public async retrieve(spec: SQLSpecification<Feature>): Promise<GeoFeatureList> {
-        let features: GeoFeatureList = [];
+        let feature_list: GeoFeatureList = {type: "FeatureCollection", features: []};
         try {
             let client = await this._pool.connect();
             try {
@@ -33,10 +33,10 @@ export class FeatureSQLStorage implements Storage<Feature> {
                 client.release();
                 if (res.rowCount > 0) {
                     for (let row of res.rows) {
-                        features.push(new Feature(row).toGeoJson());
+                        feature_list.features.push(new Feature(row).toGeoJson());
                     }
                 }
-                return features;
+                return feature_list;
             } catch (err) {
                 console.error(err);
             }

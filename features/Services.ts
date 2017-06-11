@@ -72,14 +72,11 @@ export class FeatureController {
     resolve(single: boolean, spec: SQLSpecification<Feature>) {
         return factory.repository.query(spec).then(
             resolve=> {
-                if (resolve && resolve.length) {
+                if (resolve) {
                     if (single) {return resolve[0];}
                     return resolve;
                 }
-                return new Promise((resolve, reject)=> {
-                    if (resolve) { return [];}
-                    return new Error("Error - services");
-                });
+                throw new Error("Error - services");
             },
             reject => {
                 console.log(reject);
