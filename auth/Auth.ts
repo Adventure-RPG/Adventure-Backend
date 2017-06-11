@@ -3,8 +3,9 @@
  */
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
-import { Observable } from "rxjs";
 import {Value} from "ts-json-properties";
+import {Observable} from "rxjs/Observable";
+import Rx from 'rxjs/Rx';
 
 export class AuthService {
     @Value("config.settings")
@@ -20,6 +21,11 @@ export class AuthService {
             }
         };
         jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, callback);
+        Rx.Observable.range(1, 3)
+            .map(function (x, idx, obs) {
+                return x * x;
+            });
+
         return Observable.bindCallback(callback);
     }
 
