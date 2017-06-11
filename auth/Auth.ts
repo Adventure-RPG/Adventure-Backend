@@ -3,14 +3,15 @@
  */
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
-import { Observable } from "rxjs";
 import {Value} from "ts-json-properties";
+import {Observable} from "rxjs/Observable";
+import Rx from 'rxjs/Rx';
 
 export class AuthService {
     @Value("config.settings")
     private settings: any;
 
-    public createToken(email: string): Promise<string> {
+    public createToken(email: string): Observable<string> {
         let payload = {email: email};
         let callback = (err, decoded) => {
             if (err) {
@@ -20,7 +21,12 @@ export class AuthService {
             }
         };
         jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, callback);
-        return new Promise(callback);
+        Rx.Observable.range(1, 3)
+            .map(function (x, idx, obs) {
+                return x * x;
+            });
+
+        return Observable.bindCallback(callback);
     }
 
     public verifyToken(token: string): Observable<boolean> {
