@@ -18,6 +18,8 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/borsch-label/game_creator#readme",
   "dependencies": {
+    "@types/bcrypt": "^1.0.0",
+    "@types/jsonwebtoken": "^7.2.1",
     "express": "latest",
     "pg-rxjs": "^1.0.20",
     "rxjs": "^5.2.0",
