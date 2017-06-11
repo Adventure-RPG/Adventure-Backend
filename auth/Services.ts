@@ -19,7 +19,7 @@ export class UserService {
             return authService.createToken(body.email).then(resolve => {
                 return resolve;
             }, reject => {
-                throw new Errors.UnauthorizedError();
+                return new Errors.UnauthorizedError();
             });
         }
     }
