@@ -3,24 +3,29 @@
  */
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
-import {Value} from "ts-json-properties";
-import {Observable} from "rxjs/Observable";
+import {Value, Properties} from "ts-json-properties";
+import {Observable} from "rxjs";
+import * as fs from "fs";
 
+let c = 0;
 export class AuthService {
-    @Value("config.settings")
     private settings: any;
 
+    constructor() {
+        this.settings = Properties.getValue("settings");
+    }
+
     public createToken(email: string): Promise<string> {
-        let payload = {email: email};
-        let callback = (err, decoded) => {
-            if (err) {
-                throw err;
-            } else {
-                return decoded;
-            }
-        };
-        jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, callback);
-        return new Promise(callback);
+        return new Promise((resolve, reject) => {
+            let payload = {email: email};
+            jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, (err, token) => {
+               if (err) {
+                   reject(err);
+               } else {
+                   resolve(token);
+               }
+           });
+        });
     }
 
     public verifyToken(token: string): Promise<boolean> {
@@ -29,12 +34,12 @@ export class AuthService {
         return new Promise(callback);
     }
 
-    public createHash(password: string): Observable<string> {
-        return Observable.fromPromise(bcrypt.hash(password, this.settings.saltRounds));
+    public createHash(password: string): Promise<string> {
+        return bcrypt.hash(password, this.settings.saltRounds);
     }
 
-    public checkHash(password: string, hash: string): Observable<boolean> {
-        return Observable.fromPromise(bcrypt.compare(password, hash));
+    public checkHash(password: string, hash: string): Promise<boolean> {
+        return bcrypt.compare(password, hash);
     }
 }
 

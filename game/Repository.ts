@@ -1,10 +1,10 @@
-import {Identifiable} from "./Model";
+import {Identifiable, Model} from "./Model";
 import {Specification} from "./Specification";
-import {GeoFeatureList} from "../geojson/models";
+import {GeoFeatureList, List} from "../geojson/models";
 
-export interface Repository<T extends Identifiable> {
+export interface Repository<T extends Model> {
     add(t: T): void;
     remove(t: T): void;
     update(t: T): void;
-    query(spec: Specification<T>): Promise<GeoFeatureList<T>>;
+    query(spec: Specification<T>): Promise<List<T>>;
 }

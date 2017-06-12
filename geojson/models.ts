@@ -1,5 +1,6 @@
-import {Identifiable} from "../game/Model";
+import {Identifiable, Model} from "../game/Model";
 import * as geojson from "geojson";
+import {Feature} from "../features/Model";
 /**
  * Created by GolemXIV on 23.04.2017.
  */
@@ -15,6 +16,10 @@ export function isGeoFeature(obj: any): obj is GeoFeature {
     return "type" in obj;
 }
 
-export interface GeoFeatureList extends geojson.FeatureCollection<geojson.GeometryObject> {
+export interface List<T extends Model> {
+
+}
+
+export interface GeoFeatureList extends List<Feature>, geojson.FeatureCollection<geojson.GeometryObject> {
     properties?: {};
 }

@@ -8,13 +8,18 @@ export class User extends Model {
 
     constructor(_id?: Identifiable);
 
+    constructor(obj: {email: string, username: string, password: string, is_active: boolean});
+
     constructor(obj: any) {
         if (isIdentifiable(obj)) {
             super(obj);
         } else {
-            super(obj.id);
+            if(obj.id) {
+                super(obj.id);
+            }
             this.username = obj.username;
             this.email = obj.email;
+            this.password = obj.password;
             this.is_active = obj.is_active;
         }
     }
@@ -43,11 +48,20 @@ export class User extends Model {
         this._is_active = value;
     }
 
-    get password(): string {
+    get password() {
         return this._password;
     }
 
     set password(value: string) {
         this._password = value;
     }
+
+    equalbyCredentials(credentials: Credentials) {
+        return (this.username === credentials.email) && (this.password === credentials.password);
+    }
+}
+
+export interface Credentials {
+    email: string;
+    password: string;
 }
