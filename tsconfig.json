@@ -7,6 +7,7 @@
     "module": "commonjs",
     "outDir": "./dist",
     "typeRoots": ["node_modules/@types"],
+    "sourceMap": true,
     "target": "es5"
   }
 }

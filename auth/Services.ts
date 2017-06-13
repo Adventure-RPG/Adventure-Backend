@@ -3,7 +3,7 @@
  */
 import {Path, POST, GET, PathParam, Return, Errors, ReferencedResource, HttpError} from "typescript-rest";
 import {authService} from "./Auth";
-import {AcceptResource} from "./Statuses";
+import {AcceptResource, BadRequestError, CreateResource, UnAuthorized} from "./Statuses";
 import {User} from "./Model";
 import {factory} from "./Factory";
 import {ByCredentialsSpecification, ByIdSpecification, BySQLSpecification} from "./Specifications";
@@ -17,7 +17,7 @@ export class UserService {
     @GET
     getUsers() {
         return this.resolve(false, new BySQLSpecification()).then(resolve=> {
-            return new Return.RequestAccepted("", {users: resolve});
+            return new AcceptResource({users: resolve});
         });
     }
 
@@ -39,10 +39,10 @@ export class UserService {
                 return authService.createToken(body.email);
             }).then(resolve => {
                 console.log(resolve);
-                return new Return.NewResource("", {token: resolve});
+                return new AcceptResource({token: resolve});
             }).catch(reject => {
                 console.log(reject);
-                return new Errors.UnauthorizedError("You're fucked.");
+                return new UnAuthorized("You're fucked.");
             });
         }
     }
@@ -57,12 +57,12 @@ export class UserService {
                 console.log("db"+res);
                 return authService.createToken(user.email).then(resolve => {
                     console.log(resolve);
-                    return new Return.NewResource("", {token: resolve});
+                    return new CreateResource({token: resolve});
                 });
             });
         }).catch(reject => {
             console.log(reject);
-            return new Errors.BadRequestError("Fucked");
+            return new BadRequestError("Fucked");
         });
     }
 
@@ -77,7 +77,7 @@ export class UserService {
             },
             reject => {
                 console.log(reject);
-                return new Errors.UnauthorizedError("You're fucked.");
+                throw new BadRequestError("You're fucked.");
             }
         );
     }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "publish": "npm install",
-    "migrate": "db-migrate up --config=config/db.json -e dev",
+    "migrate": "db-migrate up --config=config/db.json -e prod",
     "start": "npm run build:live:tsnode",
     "build:live:tsnode": "ts-node game/app.ts",
     "build:live:nodemon": "nodemon --exec ts-node ./game/app.ts",

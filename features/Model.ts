@@ -27,7 +27,7 @@ export class Feature extends Model {
     public get geo(){
         return this._geo;
     }
-
+x
     public inPoint(latitude, longtitude, altitude): boolean {
         return undefined;
     }
