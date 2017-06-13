@@ -2,7 +2,7 @@
   "dev": {
     "driver": "pg",
     "user": "postgres",
-    "password": "rsersi9p7zwjtxn3",
+    "password": "Hukuta12",
     "host": "localhost",
     "database": "game",
     "schema": "public"
