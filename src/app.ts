@@ -2,8 +2,8 @@ import {Server} from "typescript-rest";
 import * as express from "express";
 import * as winston from "winston";
 import {Properties} from 'ts-json-properties';
-import {FeatureController} from "../features/Services";
-import {UserService} from "../auth/Services";
+import {FeatureController} from "./features/Services";
+import {UserService} from "./auth/Services";
 
 /**
  * Initialize some lib

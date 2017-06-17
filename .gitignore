@@ -37,3 +37,4 @@ src/config/runtime.yaml
 #config
 /src/config/
 src/config/db.json
+dist/
