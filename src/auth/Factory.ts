@@ -10,9 +10,9 @@ class UserFactory {
     private _rep;
 
     constructor() {
-        let config = Properties.getValue("db");
+        let config = Properties.getValue("settings.db");
 
-        this._rep = new UserRepository([new UserSQLStorage(new pg.Pool(config.dev))]);
+        this._rep = new UserRepository([new UserSQLStorage(new pg.Pool(config))]);
     }
 
     get repository() {

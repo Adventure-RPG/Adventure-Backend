@@ -1,4 +1,14 @@
 {
   "key": "very-secret-key",
-  "saltRounds": 10
+  "saltRounds": 10,
+  "db": {
+    "driver": "pg",
+    "user": "game",
+    "password": "7uRCSMeGpP",
+    "host": "localhost",
+    "port": 5432,
+    "max": 10,
+    "database": "game",
+    "schema": "public"
+  }
 }

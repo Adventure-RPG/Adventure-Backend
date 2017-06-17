@@ -1,18 +1,16 @@
 {
   "product":"adventure-auth",
     "config": {
-      "db": "config/db.template.json",
-      "settings": "config/settings.json"
+      "settings": "config/dev.json"
     },
   "propertiesFiles":{
     "cwd":"./src",
     "files":{
-      "db": "config/db.template.json",
-      "settings": "config/settings.json",
-      "bbox": "/geojson/schemas/bbox.json",
-      "crs": "/geojson/schemas/crs.json",
-      "geometry": "/geojson/schemas/geometry.json",
-      "feature": "/geojson/schemas/feature.json"    }
+      "settings": "config/dev.json",
+      "bbox": "geojson/schemas/bbox.json",
+      "crs": "geojson/schemas/crs.json",
+      "geometry": "geojson/schemas/geometry.json",
+      "feature": "geojson/schemas/feature.json"    }
   },
   "schemes": ["feature", "geometry", "bbox", "crs"],
   "default_scheme": "http://json-schema.org/geojson/feature.json"
