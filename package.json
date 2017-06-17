@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "publish": "npm install",
-    "migrate": "db-migrate up --config=config/db.json -e prod",
+    "migrate": "db-migrate up --config=src/config/db.json -e prod",
     "start": "npm run build:live:tsnode",
-    "build:live:tsnode": "ts-node game/app.ts",
-    "build:live:nodemon": "nodemon --exec ts-node ./game/app.ts",
-    "build:live:nodemon:compile": "nodemon --exec ts-node ./game/app.ts"
+    "build:live:tsnode": "ts-node src/game/app.ts",
+    "build:live:nodemon": "nodemon --exec ts-node ./src/game/app.ts",
+    "build:live:nodemon:compile": "nodemon --exec ts-node ./src/game/app.ts"
   },
   "repository": {
     "type": "git",
