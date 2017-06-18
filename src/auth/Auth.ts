@@ -18,9 +18,8 @@ export class AuthService {
     public createToken(email: string): Promise<string> {
         return new Promise((resolve, reject) => {
             let payload = {email: email};
-            jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, (err, token) => {
-               if (err) {
-                   reject(err);
+            jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, (err, token) => { if (err) {
+                    reject(err);
                } else {
                    resolve(token);
                }
@@ -36,10 +35,6 @@ export class AuthService {
 
     public createHash(password: string): Promise<string> {
         return bcrypt.hash(password, this.settings.saltRounds);
-    }
-
-    public checkHash(password: string, hash: string): Promise<boolean> {
-        return bcrypt.compare(password, hash);
     }
 }
 
