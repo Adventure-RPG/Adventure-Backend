@@ -3,9 +3,10 @@ node ('node') {
 
     try {
         stage('Checkout') {
-            checkout master
+            checkout scm
         }
         stage('Build') {
+            sh 'npm cache clean'
             sh 'npm install'
         }
         stage('Restart') {
