@@ -1,12 +1,12 @@
 {
   "product":"adventure-auth",
     "config": {
-      "settings": "config/dev.json"
+      "settings": "config/settings.json"
     },
   "propertiesFiles":{
     "cwd":"./src",
     "files":{
-      "settings": "config/dev.json",
+      "settings": "config/settings.json",
       "bbox": "geojson/schemas/bbox.json",
       "crs": "geojson/schemas/crs.json",
       "geometry": "geojson/schemas/geometry.json",
