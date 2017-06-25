@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "publish": "npm install",
     "build": "tsc -p .",
     "migrate": "db-migrate up --config=src/config/db.json -e prod",
     "start": "npm run build:live:tsnode",
