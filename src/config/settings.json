@@ -3,11 +3,9 @@
   "saltRounds": 10,
   "db": {
     "driver": "pg",
-    "user": "game",
-    "password": "7uRCSMeGpP",
+    "user": "postgres",
+    "password": "rsersi9p7zwjtxn3",
     "host": "localhost",
-    "port": 5432,
-    "max": 10,
     "database": "game",
     "schema": "public"
   }
