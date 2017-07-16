@@ -1,16 +1,14 @@
 version: '2'
 services:
-#  nginx:
-#    image: nginx
-##    read_only: true
-#    depends_on:
-#      - api
-#    ports:
-#      - "8080:80"
-##      - "8443:443"
-#    volumes:
-##      - ./config/nginx-snippets:/etc/nginx/snippets:ro
-#      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  nginx:
+    image: nginx
+    depends_on:
+      - api
+    ports:
+      - "9999:9999"
+#      - "8443:443"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
   api:
     image: node
     hostname: api
@@ -18,11 +16,13 @@ services:
       - db
     links:
       - "db"
+    expose:
+      - "3000"
     environment:
       - CORS_ORIGIN=http://localhost:3001,http://localhost:3000
       - DATABASE_URL=postgres://game:7uRCSMeGpP@db:5432/game
     ports:
-      - "3000:3000"
+      - "0.0.0.0:3000:3000"
       - "127.0.0.1:9229:9229" # V8 inspector (when NODE_DEBUG=true)
     volumes:
       - ./:/usr/src/app
