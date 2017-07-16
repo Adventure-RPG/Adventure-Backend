@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
+    "migrate": "db-migrate up --config=src/config/settings.json -m src/migrations -e db",
+    "start": "npm run build:live:tsnode",
     "build:live:node": "./dist/app.js",
+    "build:live:tsnode": "ts-node src/app.ts",
+    "build:live:nodemon": "nodemon --exec ts-node ./src/app.ts",
+    "build:live:nodemon:compile": "nodemon --exec ts-node ./src/app.ts"
   },
   "repository": {
     "type": "git",
@@ -16,9 +21,7 @@
   "homepage": "https://bitbucket.org/borsch-label/game_creator#readme",
   "dependencies": {
     "@reactivex/rxjs": "^5.4.0",
-    "@types/bcrypt": "^1.0.0",
     "@types/jsonwebtoken": "^7.2.1",
-    "bcrypt": "^1.0.2",
     "express": "latest",
     "jsonwebtoken": "^7.4.1",
     "pg-rxjs": "^1.0.20",

@@ -7,7 +7,7 @@ import {Feature} from "../features/Model";
 
 export interface GeoFeature extends geojson.Feature<geojson.GeometryObject> {
     properties: {
-        id?: Identifiable,
+        id?: number,
         name: string,
     };
 }

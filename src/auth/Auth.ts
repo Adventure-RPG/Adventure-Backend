@@ -2,7 +2,6 @@
  * Created by GolemXIV on 11.06.2017.
  */
 import * as jwt from "jsonwebtoken";
-import * as bcrypt from "bcrypt";
 import {Value, Properties} from "ts-json-properties";
 import {Observable} from "rxjs";
 import * as fs from "fs";
@@ -34,7 +33,7 @@ export class AuthService {
     }
 
     public createHash(password: string): Promise<string> {
-        return bcrypt.hash(password, this.settings.saltRounds);
+        return new Promise(()=> password);
     }
 }
 

@@ -65,7 +65,7 @@ export class FeatureController {
 
     @Path(":id")
     @DELETE
-    deleteFeature(@PathParam("id") id: number) {
+    deleteFeature(@PathParam("id") id: any) {
         return factory.repository.remove(new Feature(id));
     }
 
