@@ -5,12 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
-    "migrate": "db-migrate up --config=src/config/settings.json -m src/migrations -e db",
-    "start": "npm run build:live:tsnode",
     "build:live:node": "./dist/app.js",
-    "build:live:tsnode": "ts-node src/app.ts",
-    "build:live:nodemon": "nodemon --exec ts-node ./src/app.ts",
-    "build:live:nodemon:compile": "nodemon --exec ts-node ./src/app.ts"
   },
   "repository": {
     "type": "git",
