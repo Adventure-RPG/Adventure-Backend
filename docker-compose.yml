@@ -35,7 +35,7 @@ services:
       - POSTGRES_USER=game
       - POSTGRES_PASSWORD=7uRCSMeGpP
     ports:
-      - "127.0.0.1:5433:5432"
+      - "127.0.0.1:5434:5434"
     volumes:
       - ./config:/usr/app/config
 
