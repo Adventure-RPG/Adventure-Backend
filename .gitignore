@@ -34,5 +34,4 @@ build/Release
 src/config/runtime.yaml
 
 #config
-src/config/settings.json
 dist/
