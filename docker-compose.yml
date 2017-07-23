@@ -18,7 +18,7 @@ services:
       - "db"
     environment:
       - CORS_ORIGIN=http://localhost:3001,http://localhost:3000
-      - DATABASE_URL=postgres://game:7uRCSMeGpP@db:5433/game
+      - DATABASE_URL=postgres://game:7uRCSMeGpP@db:5434/game
     ports:
       - "127.0.0.1:9999:3000"
 #      - "127.0.0.1:9229:9229" # V8 inspector (when NODE_DEBUG=true)
@@ -34,6 +34,8 @@ services:
       - POSTGRES_DB=game
       - POSTGRES_USER=game
       - POSTGRES_PASSWORD=7uRCSMeGpP
+    expose:
+      - "5434"
     ports:
       - "127.0.0.1:5434:5434"
     volumes:
