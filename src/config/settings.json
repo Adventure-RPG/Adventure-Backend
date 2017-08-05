@@ -1,6 +1,4 @@
 {
-  "key": "very-secret-key",
-  "saltRounds": 10,
   "db": {
     "driver": "pg",
     "user": "game",
@@ -10,5 +8,15 @@
     "max": 10,
     "database": "game",
     "schema": "public"
+  },
+  "jwt": {
+    "key": "very-secret-key",
+    "expireIn": 3600
+  },
+  "crypto": {
+    "saltBytes": 16,
+    "iterations": 200000,
+    "hashBytes": 32,
+    "digest": "sha512"
   }
 }

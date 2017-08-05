@@ -3,11 +3,17 @@
  */
 import * as jwt from "jsonwebtoken";
 import {Value, Properties} from "ts-json-properties";
-import {Observable} from "rxjs";
-import * as fs from "fs";
+import * as crypto from "crypto";
 
-let c = 0;
+
 export class AuthService {
+
+    @Value("settings.jwt")
+    private _jwt;
+
+    @Value("settings.crypto")
+    private _crypto;
+
     private settings: any;
 
     constructor() {
@@ -17,7 +23,8 @@ export class AuthService {
     public createToken(email: string): Promise<string> {
         return new Promise((resolve, reject) => {
             let payload = {email: email};
-            jwt.sign(payload, this.settings.key, {expiresIn: 60 * 60}, (err, token) => { if (err) {
+            jwt.sign(payload, this._jwt.key, {expiresIn: this._jwt.expireIn}, (err, token) => {
+               if (err) {
                     reject(err);
                } else {
                    resolve(token);
@@ -28,12 +35,22 @@ export class AuthService {
 
     public verifyToken(token: string): Promise<boolean> {
         let callback = (err, decoded) => !err || decoded;
-        jwt.verify(token, this.settings.key, callback);
+        jwt.verify(token, this._jwt.key, callback);
         return new Promise(callback);
     }
 
     public createHash(password: string): Promise<string> {
-        return new Promise(()=> password);
+        return new Promise((resolve, reject)=> {
+            crypto.randomBytes(this._crypto.saltBytes, (err, salt)=> {
+                if (err) reject(err);
+                crypto.pbkdf2(password, salt, this._crypto.iterations, this._crypto.hashBytes,
+                    this._crypto.digest, (err, hash)=> {
+                    if (err) reject(err);
+
+                    resolve(hash.toString("base64"));
+                });
+            });
+        });
     }
 }
 

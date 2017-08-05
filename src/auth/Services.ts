@@ -1,7 +1,7 @@
 /**
  * Created by GolemXIV on 11.06.2017.
  */
-import {Path, POST, GET, PathParam, Return, Errors, ReferencedResource, HttpError} from "typescript-rest";
+import {Path, POST, GET, PathParam, ReferencedResource, HttpError} from "typescript-rest";
 import {authService} from "./Auth";
 import {AcceptResource, BadRequestError, CreateResource, UnAuthorized} from "./Statuses";
 import {User} from "./Model";
@@ -9,7 +9,7 @@ import {factory} from "./Factory";
 import {ByCredentialsSpecification, ByIdSpecification, BySQLSpecification} from "./Specifications";
 import {SQLSpecification} from "../game/Specification";
 import {List} from "../geojson/models";
-
+import get = Reflect.get;
 
 @Path("/users")
 export class UserService {
@@ -66,7 +66,7 @@ export class UserService {
         });
     }
 
-    resolve(single: boolean, spec: SQLSpecification<User>) {
+    resolve(single: boolean, spec: SQLSpecification<User>): Promise<User> {
         return factory.repository.query(spec).then(
             resolve=> {
                 if (resolve.length > 0) {
@@ -77,8 +77,8 @@ export class UserService {
             },
             reject => {
                 console.log(reject);
-                throw new BadRequestError("You're fucked.");
-            }
+                throw new BadRequestError("You're so fucked.");
+            },
         );
     }
 }

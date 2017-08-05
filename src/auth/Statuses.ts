@@ -2,7 +2,7 @@
  * Created by GolemXIV on 12.06.2017.
  */
 import { ReferencedResource } from "typescript-rest";
-import { HttpError } from "typescript-rest";
+import { Errors } from "typescript-rest";
 
 export class AcceptResource extends ReferencedResource {
     static statusCode: number = 200;
@@ -18,17 +18,10 @@ export class CreateResource extends ReferencedResource {
     }
 }
 
-export class BadRequestError extends HttpError {
+export class BadRequestError extends Errors.BadRequestError {
     static statusCode: number = 400;
-    constructor(message: string) {
-        super("BadRequest", BadRequestError.statusCode, message);
-    }
 }
 
-
-export class UnAuthorized extends HttpError {
+export class UnAuthorized extends Errors.UnauthorizedError {
     static statusCode: number = 401;
-    constructor(message: string) {
-        super("UnAuthorized", UnAuthorized.statusCode, message);
-    }
 }

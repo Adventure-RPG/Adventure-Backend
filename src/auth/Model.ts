@@ -1,5 +1,6 @@
 import {Model, Identifiable, isIdentifiable} from "../game/Model";
 
+
 export class User extends Model {
     private _username: string;
     private _email: string;
