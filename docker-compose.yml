@@ -8,10 +8,11 @@ services:
     links:
       - "db"
     environment:
+      - NODE_DEBUG=*
       - CORS_ORIGIN=http://localhost:3001,http://localhost:3000
     ports:
-      - "9999:3000"
-#      - "127.0.0.1:9229:9229" # V8 inspector (when NODE_DEBUG=true)
+      - "3000:3000"
+      - "5858:5858"
     volumes:
       - ./:/usr/src/app
     user: node

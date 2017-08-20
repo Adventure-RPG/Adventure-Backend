@@ -8,4 +8,9 @@ do
     fi
     sleep 5
 done
-npm start
+
+if [ -z ${NODE_DEBUG+x} ]; then
+    npm start
+else
+    npm run watch
+fi

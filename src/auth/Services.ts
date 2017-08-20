@@ -73,7 +73,7 @@ export class UserService {
                     if (single) {return resolve[0];}
                     return resolve;
                 }
-                throw new Error("Error - services");
+                throw new BadRequestError("Error - services");
             },
             reject => {
                 console.log(reject);

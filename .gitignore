@@ -35,3 +35,6 @@ src/config/runtime.yaml
 
 #config
 dist/
+
+# Docker
+docker-compose.dev.yml

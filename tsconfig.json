@@ -9,6 +9,7 @@
     "typeRoots": ["node_modules/@types"],
     "sourceRoot": "./src",
     "sourceMap": true,
+    "inlineSources": true,
     "target": "es5"
   }
 }
