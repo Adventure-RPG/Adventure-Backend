@@ -3,6 +3,8 @@
  */
 import {HttpError} from "typescript-rest";
 import {Request, Response, NextFunction} from "express";
+import {Value, Properties} from "ts-json-properties";
+import * as winston from "winston";
 
 export const errorHandler =  (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof HttpError) {
@@ -16,3 +18,36 @@ export const errorHandler =  (err: Error, req: Request, res: Response, next: Nex
         next(err);
     }
 };
+
+export class Logger {
+
+    @Value("logging")
+    private _settings;
+
+    private _logger: winston.LoggerInstance;
+
+    constructor(private _name: string, logger?: winston.LoggerInstance) {
+        let transports = [];
+        let settings: {key: string, val: any} = this._settings[_name];
+        for (let key in settings) {
+            transports.push(this.getTransport(_name, key));
+        }
+
+        this._logger = logger ? logger : new (winston.Logger)({transports});
+    };
+
+    get logger(): winston.LoggerInstance {
+        return this._logger;
+    }
+
+    getTransport(name: string, type: string): winston.TransportInstance {
+        return new (winston.transports[this.toTransportName(type)])(this._settings[name][type]);
+    }
+
+    toTransportName = (name: string): string => name.substr(0, 1).toUpperCase() + name.substr(1);
+
+    log: winston.LogMethod = (level: string, msg: string, ...meta: any[]) => this._logger[level](msg, ...meta);
+
+    error: winston.LeveledLogMethod = (msg: string, ...meta: any[]) => this._logger.error(msg, ...meta);
+
+}

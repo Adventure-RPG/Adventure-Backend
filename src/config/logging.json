@@ -1,0 +1,72 @@
+{
+  "auth": {
+    "console": {
+      "level": "info",
+      "colorize": true
+    },
+    "file": {
+      "level": "info",
+      "colorize": true,
+      "filename": "./logs/auth.log",
+      "maxsize": 50000,
+      "maxFiles": 10,
+      "zippedArchive": true
+    }
+  },
+  "features": {
+    "console": {
+      "level": "info",
+      "colorize": true
+    },
+    "file": {
+      "level": "info",
+      "colorize": true,
+      "filename": "./logs/feature.log",
+      "maxsize": 50000,
+      "maxFiles": 10,
+      "zippedArchive": true
+    }
+  },
+  "users": {
+    "console": {
+      "level": "info",
+      "colorize": true
+    },
+    "file": {
+      "level": "info",
+      "colorize": true,
+      "filename": "./logs/users.log",
+      "maxsize": 50000,
+      "maxFiles": 10,
+      "zippedArchive": true
+    }
+  },
+  "hash": {
+    "console": {
+      "level": "info",
+      "colorize": true
+    },
+    "file": {
+      "level": "info",
+      "colorize": true,
+      "filename": "./logs/hash.log",
+      "maxsize": 50000,
+      "maxFiles": 10,
+      "zippedArchive": true
+    }
+  },
+  "default": {
+    "console": {
+      "level": "info",
+      "colorize": true
+    },
+    "file": {
+      "level": "info",
+      "colorize": true,
+      "filename": "./logs/default.log",
+      "maxsize": 50000,
+      "maxFiles": 10,
+      "zippedArchive": true
+    }
+  }
+}

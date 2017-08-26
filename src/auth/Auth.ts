@@ -5,6 +5,8 @@ import * as jwt from "jsonwebtoken";
 import {Value, Properties} from "ts-json-properties";
 import {HashGenerator} from "./Hash";
 import {TokenCredentials} from "./Model";
+import {Logger} from "../game/Errors";
+import {toPromise} from "../library/utils";
 
 export class AuthService {
 
@@ -21,21 +23,11 @@ export class AuthService {
     }
 
     public createToken(data: TokenCredentials): Promise<string> {
-        return new Promise((resolve, reject) => {
-            jwt.sign(data, this._jwt.key, {expiresIn: this._jwt.expireIn}, (err, token) => {
-               if (err) {
-                    reject(err);
-               } else {
-                   resolve(token);
-               }
-           });
-        });
+        return toPromise(jwt.sign, data, this._jwt.key, {expiresIn: this._jwt.expireIn});
     }
 
     public verifyToken(token: string): Promise<boolean> {
-        let callback = (err, decoded) => !err || decoded;
-        jwt.verify(token, this._jwt.key, callback);
-        return new Promise(callback);
+        return toPromise(jwt.verify, token, this._jwt.key);
     }
 
     public createPassword(passwd: string): Promise<string> {
@@ -44,4 +36,4 @@ export class AuthService {
 
 }
 
-export const authService = new AuthService(new HashGenerator());
+export const authService = new AuthService(new HashGenerator(new Logger("hash")));

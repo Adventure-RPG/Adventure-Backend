@@ -2,6 +2,7 @@
  * Created by GolemXIV on 11.06.2017.
  */
 import {Path, POST, GET, PathParam, ReferencedResource, HttpError} from "typescript-rest";
+import {Value} from "ts-json-properties";
 import {authService} from "./Auth";
 import {AcceptResource, BadRequestError, CreateResource, UnAuthorized} from "./Statuses";
 import {RegisterCredentials, User, UserData, userFactory} from "./Model";
@@ -9,9 +10,18 @@ import {factory} from "./Factory";
 import {ByCredentialsSpecification, ByIdSpecification, BySQLSpecification} from "./Specifications";
 import {SQLSpecification} from "../game/Specification";
 import {List} from "../geojson/models";
+import {Logger} from "../game/Errors";
 
 @Path("/users")
 export class UserService {
+    private _logger: Logger;
+
+    @Value("messages.users")
+    private _messages;
+
+    constructor() {
+        this._logger = new Logger("users");
+    }
 
     @GET
     getUsers() {
@@ -30,18 +40,13 @@ export class UserService {
     @POST
     @Path("/login")
     login(body): Promise<ReferencedResource|HttpError> {
-        console.log(`body ${body.email} - ${body.password}`);
         if (body.email && body.password) {
             return this.resolve(true, new ByCredentialsSpecification(body.email, body.password))
-            .then(res => {
-                console.log(res);
-                return authService.createToken(body.email);
-            }).then(resolve => {
-                console.log(resolve);
-                return new AcceptResource({token: resolve});
-            }).catch(reject => {
-                console.log(reject);
-                return new UnAuthorized("You're fucked.");
+            .then(res => authService.createToken(body.email))
+            .then(resolve => new AcceptResource({token: resolve}))
+            .catch(err => {
+                this._logger.error(this._messages.errors.USER_BAD_LOGIN_ERROR, err.message, err);
+                throw new BadRequestError(this._messages.errors.USER_BAD_LOGIN_ERROR);
             });
         }
     }
@@ -49,6 +54,7 @@ export class UserService {
     @POST
     @Path("/register")
     register(body: RegisterCredentials): Promise<ReferencedResource|HttpError> {
+        if (!body) { throw new BadRequestError(this._messages.errors.USER_EMPTY_PAYLOAD_ERROR.message); }
 
         return authService.createPassword(body.password).then(hash=> {
             body.password = hash;
@@ -59,8 +65,9 @@ export class UserService {
                     return new CreateResource({token: resolve});
                 });
             });
-        }).catch(reject => {
-            throw new BadRequestError("Fucked");
+        }).catch(err => {
+            this._logger.error(this._messages.errors.USER_BAD_REGISTER_ERROR, err.message, err);
+            throw new BadRequestError(this._messages.errors.USER_BAD_REGISTER_ERROR);
         });
     }
 
@@ -69,14 +76,12 @@ export class UserService {
             resolve=> {
                 if (resolve.length > 0) {
                     if (single) {return resolve[0];}
-                    return resolve;
                 }
-                throw new BadRequestError("Error - services");
+                return resolve;
             },
-            reject => {
-                console.log(reject);
-                throw new BadRequestError("You're so fucked.");
-            },
-        );
+        ).catch(err => {
+            this._logger.error(this._messages.errors.USER_RETRIEVE_ERROR, err.message, err);
+            throw new BadRequestError(this._messages.errors.USER_RETRIEVE_ERROR);
+        });
     }
 }

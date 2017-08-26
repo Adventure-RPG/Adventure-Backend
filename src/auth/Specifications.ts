@@ -22,7 +22,7 @@ export class ByIdSpecification extends BySQLSpecification implements SQLSpecific
     }
 
     public toSqlClause() {
-        return super.toSqlClause() + `WHERE id = ${this._id}`;
+        return super.toSqlClause() + ` WHERE id = ${this._id}`;
     }
 }
 

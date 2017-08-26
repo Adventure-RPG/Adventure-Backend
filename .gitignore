@@ -38,3 +38,6 @@ dist/
 
 # Docker
 docker-compose.dev.yml
+
+# Logs
+./logs
