@@ -1,7 +1,14 @@
 import {Model, Identifiable, isIdentifiable} from "../game/Model";
 
+export interface UserData extends Identifiable {
+    id?: number;
+    email: string;
+    username: string;
+    password: string;
+    is_active: boolean;
+}
 
-export class User extends Model {
+export class User extends Model implements UserData {
     private _username: string;
     private _email: string;
     private _password: string;
@@ -9,19 +16,13 @@ export class User extends Model {
 
     constructor(_id?: Identifiable);
 
-    constructor(obj: {email: string, username: string, password: string, is_active: boolean});
+    constructor(obj: UserData);
 
     constructor(obj: any) {
         if (isIdentifiable(obj)) {
             super(obj);
         } else {
-            if(obj.id) {
-                super(obj.id);
-            }
-            this.username = obj.username;
-            this.email = obj.email;
-            this.password = obj.password;
-            this.is_active = obj.is_active;
+            Object.assign(this, obj);
         }
     }
 
@@ -66,3 +67,20 @@ export interface Credentials {
     email: string;
     password: string;
 }
+
+export interface RegisterCredentials {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export interface TokenCredentials {
+    email: string;
+}
+
+export class UserFactory {
+    createUser = (data: UserData) => new User(data);
+    getInitialData = ():UserData => Object.create({is_active: false});
+}
+
+export const userFactory: UserFactory = new UserFactory();

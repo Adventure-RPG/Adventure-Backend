@@ -3,8 +3,8 @@
  */
 import * as jwt from "jsonwebtoken";
 import {Value, Properties} from "ts-json-properties";
-import * as crypto from "crypto";
-
+import {HashGenerator} from "./Hash";
+import {TokenCredentials} from "./Model";
 
 export class AuthService {
 
@@ -16,14 +16,13 @@ export class AuthService {
 
     private settings: any;
 
-    constructor() {
+    constructor(private _hash: HashGenerator) {
         this.settings = Properties.getValue("settings");
     }
 
-    public createToken(email: string): Promise<string> {
+    public createToken(data: TokenCredentials): Promise<string> {
         return new Promise((resolve, reject) => {
-            let payload = {email: email};
-            jwt.sign(payload, this._jwt.key, {expiresIn: this._jwt.expireIn}, (err, token) => {
+            jwt.sign(data, this._jwt.key, {expiresIn: this._jwt.expireIn}, (err, token) => {
                if (err) {
                     reject(err);
                } else {
@@ -39,19 +38,10 @@ export class AuthService {
         return new Promise(callback);
     }
 
-    public createHash(password: string): Promise<string> {
-        return new Promise((resolve, reject)=> {
-            crypto.randomBytes(this._crypto.saltBytes, (err, salt)=> {
-                if (err) reject(err);
-                crypto.pbkdf2(password, salt, this._crypto.iterations, this._crypto.hashBytes,
-                    this._crypto.digest, (err, hash)=> {
-                    if (err) reject(err);
-
-                    resolve(hash.toString("base64"));
-                });
-            });
-        });
+    public createPassword(passwd: string): Promise<string> {
+        return this._hash.encrypt(passwd);
     }
+
 }
 
-export const authService = new AuthService();
+export const authService = new AuthService(new HashGenerator());

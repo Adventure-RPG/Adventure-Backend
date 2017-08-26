@@ -11,6 +11,5 @@ export function AuthRequired(target: any, propertyKey: string, descriptor: Prope
         console.debug("The return value is: " + result);               // post
         return result;                                               // return the result of the original method
     };
-
     return descriptor;
 }

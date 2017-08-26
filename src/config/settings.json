@@ -17,6 +17,7 @@
     "saltBytes": 16,
     "iterations": 200000,
     "hashBytes": 32,
-    "digest": "sha512"
+    "digest": "sha512",
+    "fmt": "base64"
   }
 }

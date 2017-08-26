@@ -4,12 +4,11 @@
 import {Path, POST, GET, PathParam, ReferencedResource, HttpError} from "typescript-rest";
 import {authService} from "./Auth";
 import {AcceptResource, BadRequestError, CreateResource, UnAuthorized} from "./Statuses";
-import {User} from "./Model";
+import {RegisterCredentials, User, UserData, userFactory} from "./Model";
 import {factory} from "./Factory";
 import {ByCredentialsSpecification, ByIdSpecification, BySQLSpecification} from "./Specifications";
 import {SQLSpecification} from "../game/Specification";
 import {List} from "../geojson/models";
-import get = Reflect.get;
 
 @Path("/users")
 export class UserService {
@@ -49,20 +48,19 @@ export class UserService {
 
     @POST
     @Path("/register")
-    register(body): Promise<ReferencedResource|HttpError> {
-        console.log(body);
-        return authService.createHash(body.password).then(hash=> {
-            let user = new User({email: body.email, username: body.username, password: hash, is_active: false});
+    register(body: RegisterCredentials): Promise<ReferencedResource|HttpError> {
+
+        return authService.createPassword(body.password).then(hash=> {
+            body.password = hash;
+            let data: UserData = Object.assign(userFactory.getInitialData(), body);
+            let user = userFactory.createUser(data);
             return factory.repository.add(user).toPromise().then(res => {
-                console.log("db"+res);
-                return authService.createToken(user.email).then(resolve => {
-                    console.log(resolve);
+                return authService.createToken({email: user.email}).then(resolve => {
                     return new CreateResource({token: resolve});
                 });
             });
         }).catch(reject => {
-            console.log(reject);
-            return new BadRequestError("Fucked");
+            throw new BadRequestError("Fucked");
         });
     }
 
