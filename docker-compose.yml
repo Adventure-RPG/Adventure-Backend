@@ -9,9 +9,9 @@ services:
       - "db"
     environment:
       - NODE_DEBUG=*
-      - CORS_ORIGIN=http://localhost:3001,http://localhost:3000
+      - CORS_ORIGIN=http://localhost:9999
     ports:
-      - "3000:3000"
+      - "9999:3000"
       - "5858:5858"
     volumes:
       - ./:/usr/src/app
