@@ -9,8 +9,8 @@ do
     sleep 5
 done
 
-if [ -z ${NODE_DEBUG+x} ]; then
+if [[ ${NODE_DEBUG} = "*" ]]; then
     npm start
 else
-    npm run watch
+    npm run build:live:node
 fi
