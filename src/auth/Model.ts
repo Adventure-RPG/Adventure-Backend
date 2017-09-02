@@ -7,7 +7,7 @@ export interface UserData extends Identifiable {
     password: string;
     is_active: boolean;
 }
-
+// TODO: User Wrapper for Service view
 export class User extends Model implements UserData {
     private _username: string;
     private _email: string;

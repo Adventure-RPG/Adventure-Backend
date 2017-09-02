@@ -28,6 +28,7 @@ export class AuthService {
 
     public verifyToken(token: string): Promise<boolean> {
         return toPromise(jwt.verify, token, this._jwt.key);
+
     }
 
     public createPassword(passwd: string): Promise<string> {

@@ -1,6 +1,6 @@
 import {Path, GET, PathParam, QueryParam, POST, PUT, DELETE, ServiceContext, Context, Errors} from "typescript-rest";
 import {Feature} from "./Model";
-import {AuthRequired} from "../game/Authentication";
+import {AuthRequired} from "../auth/Authentication";
 import {factory} from "./Factory";
 import {ByIdSpecification, BySQLSpecification, ByPointSpecification, BySquareSpecification} from "./Specifications";
 import {GeoFeatureList} from "../geojson/models";

@@ -45,6 +45,18 @@
         "meta": {
           "code": 6
         }
+      },
+      "USER_MISSING_TOKEN_ERROR": {
+        "message": "Missing token in request.",
+        "meta": {
+          "code": 7
+        }
+      },
+      "USER_INVALID_TOKEN_ERROR": {
+        "message": "User token is invalid.",
+        "meta": {
+          "code": 8
+        }
       }
     },
     "messages": {
