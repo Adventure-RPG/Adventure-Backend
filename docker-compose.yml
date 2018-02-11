@@ -1,34 +1,18 @@
-version: '2'
-services:
-  api:
-    image: node
-    hostname: api
-    depends_on:
-      - db
-    links:
-      - "db"
-    environment:
-      - NODE_DEBUG=${NODE_DEBUG}
-      - CORS_ORIGIN=http://localhost:9999
-    ports:
-      - "9999:3000"
-      - "5858:5858"
-    volumes:
-      - ./:/usr/src/app
-    user: node
-    working_dir: /usr/src/app
-    command: bash -c "./config/start_node.sh"
-  # SQL and document data store
-  db:
-    image: mdillon/postgis
-    environment:
-      - POSTGRES_DB=game
-      - POSTGRES_USER=game
-      - POSTGRES_PASSWORD=7uRCSMeGpP
-    ports:
-      - "5432"
-    volumes:
-      - ./config:/usr/app/config
+version: '3'
 
-  db:
-    image: mongo:3.4
+services:
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "8888:80"
+    links:
+      - api:api
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./dist:/src/dist
+    user: node
+    command: npm run start:prod

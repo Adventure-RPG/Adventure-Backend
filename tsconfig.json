@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
-    "lib": ["es2015", "dom"],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
     "module": "commonjs",
-    "outDir": "./dist",
-    "typeRoots": ["node_modules/@types"],
-    "sourceRoot": "./src",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
     "sourceMap": true,
-    "inlineSources": true,
-    "target": "es5"
-  }
+    "allowJs": true,
+    "outDir": "./dist"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "./node_modules",
+    "**/*.spec.ts"
+  ]
 }

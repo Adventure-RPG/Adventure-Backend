@@ -30,8 +30,6 @@ build/Release
 # Users Environment Variables
 .lock-wscript
 
-# Runtime configuration for swagger app
-src/config/runtime.yaml
 
 #config
 dist/
