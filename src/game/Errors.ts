@@ -3,7 +3,6 @@
  */
 import {HttpError} from "typescript-rest";
 import {Request, Response, NextFunction} from "express";
-import {Value, Properties} from "ts-json-properties";
 import * as winston from "winston";
 
 export const errorHandler =  (err: Error, req: Request, res: Response, next: NextFunction) => {

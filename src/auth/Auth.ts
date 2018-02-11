@@ -6,7 +6,7 @@ import {Value, Properties} from "ts-json-properties";
 import {HashGenerator} from "./Hash";
 import {TokenCredentials} from "./Model";
 import {Logger} from "../game/Errors";
-import {toPromise} from "../library/utils";
+import {toPromise} from "../game/utils";
 
 export class AuthService {
 

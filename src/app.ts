@@ -1,21 +1,13 @@
 import {Server} from "typescript-rest";
 import * as express from "express";
-import {Properties} from "ts-json-properties";
-import {FeatureController} from "./features/Services";
 import {UserService} from "./auth/Services";
 import {errorHandler, Logger} from "./game/Errors";
-
-/**
- * Initialize some lib
- */
-Properties.initialize();
 
 /**
  * Rest controllers from backend
  */
 
 const Controllers:any = [
-    FeatureController,
     UserService,
 ];
 

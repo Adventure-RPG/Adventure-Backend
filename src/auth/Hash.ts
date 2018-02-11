@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import {Value} from "ts-json-properties";
 import {Logger} from "../game/Errors";
-import {toPromise} from "../library/utils";
+import {toPromise} from "../game/utils";
 
 export class HashGenerator {
 

@@ -9,10 +9,8 @@
         "variable-name": false,
         "no-trailing-whitespace": false,
         "prefer-const": false,
-        "max-classes-per-file": false,
         "ordered-imports": false,
         "only-arrow-functions": false,
-        "ban-types": false,
-        "max-line-length": false
+        "ban-types": false
     }
 }
