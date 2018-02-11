@@ -29,3 +29,6 @@ services:
       - "5432"
     volumes:
       - ./config:/usr/app/config
+
+  db:
+    image: mongo:3.4
