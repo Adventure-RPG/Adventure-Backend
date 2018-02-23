@@ -1,0 +1,13 @@
+{
+  "db": {
+    "name": "mongodb://localhost/game-auth",
+    "user": "admin",
+    "password": "admin"
+  },
+  "jwt": {
+    "secretKey": "secret",
+    "options": {
+      "expiresIn": 3600
+    }
+  }
+}
