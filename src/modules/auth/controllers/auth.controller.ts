@@ -10,14 +10,16 @@ import {BadRequestException} from '@nestjs/common/exceptions/bad-request.excepti
 export class AuthController {
   constructor(private _user: UserService, private _auth: AuthService) {}
 
-  @Post()
-  register(@Body() registerDto: RegisterDto) {
-      return this._user.create({email: registerDto.email, password: registerDto.password});
+  @Post('register')
+  async register(@Body() registerDto: RegisterDto) {
+    const pwd = await this._auth.hashPwd(registerDto.password);
+    return this._user.create({email: registerDto.email, password: pwd});
   }
 
   @Post('login')
   async login(@Body() loginDto: CredentialsDto) {
-    const users = await this._user.query(new ByCredentialsSpecification(loginDto));
+    const pwd = await this._auth.hashPwd(loginDto.password);
+    const users = await this._user.query(new ByCredentialsSpecification({email: loginDto.email, password: pwd}));
     if (!users) {
       throw new BadRequestException('Not authorized.');
     }

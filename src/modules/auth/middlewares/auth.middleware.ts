@@ -10,7 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
         return async (req, res, next) => {
           try {
               const authHeader = req.headers.authorization.split(' ');
-              await this._service.validate(authHeader[authHeader.length - 1]);
+              await this._service.validateToken(authHeader[authHeader.length - 1]);
           } catch (Exception) {
               throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
           }
