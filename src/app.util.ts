@@ -9,7 +9,7 @@ export function Config<T>(name: string) {
                 get: () => config[name],
                 set: () => {},
                 enumerable: false,
-                configurable: false
+                configurable: false,
             });
         }
     };

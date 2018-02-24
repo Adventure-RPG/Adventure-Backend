@@ -33,6 +33,14 @@ export class AuthService {
     }));
   }
 
+  async validate(payload) {
+      return new Promise((resolve, reject) => {
+          if (!payload || !payload.email || !payload.exp) reject(new Error('Invalid payload'));
+          if (payload.exp > new Date().getTime() - this._config.options.expiresIn) resolve(false);
+          resolve(true);
+      });
+  }
+
   async hashPwd(pwd: string): Promise<string> {
     return new Promise<string>((resolve, reject) =>
         pbkdf2(pwd, this._hashConfig.salt, this._hashConfig.iterations, this._hashConfig.keylen, this._hashConfig.digest,

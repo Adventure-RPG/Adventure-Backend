@@ -7,14 +7,14 @@ import {fromPromise} from 'rxjs/observable/fromPromise';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
 import {Specification} from '../../database/interfaces/specification.interface';
-import {CredentialsDto} from '../dto/auth.dto';
+import {CredentialsDto, RegisterDto} from '../dto/auth.dto';
 
 @Component()
 export class UserService {
   constructor(@Inject(USER_MODEL_TOKEN) private readonly _model: Model<User>,
               @Inject(USER_DTO_FACTORY_TOKEN) private readonly _factory) {}
 
-  async create(_data: CredentialsDto): Promise<UserDto> {
+  async create(_data: RegisterDto): Promise<UserDto> {
       const user = new this._model(_data);
       return await user.save().then(this._factory);
   }
