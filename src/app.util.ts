@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-const fn = __dirname + `/environments/environment.${process.env.DEBUG ? 'dev' : 'prod' }.json`;
+const fn = __dirname + `/environments/environment.${process.env.NODE_ENV === 'production' ? 'prod' : 'dev' }.json`;
 const f = fs.readFileSync(fn, 'utf8');
 export const config = JSON.parse(f);
 

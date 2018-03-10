@@ -1,6 +1,6 @@
 {
   "db": {
-    "name": "mongodb://localhost/game-auth",
+    "name": "mongodb://db/game-auth",
     "user": "admin",
     "password": "admin"
   },
