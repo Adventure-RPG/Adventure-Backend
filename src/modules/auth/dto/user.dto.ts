@@ -6,12 +6,14 @@ export class UserDto {
     readonly email: string;
     readonly phone: string;
     readonly age: number;
+
+    constructor(user: User) {
+        this.first_name = user.first_name;
+        this.last_name = user.last_name;
+        this.email = user.email;
+        this.phone = user.phone;
+        this.age = user.age;
+    }
 }
 
-export const userDtoFactory = (user: User): UserDto => ({
-    first_name: user.first_name,
-    last_name: user.last_name,
-    email: user.email,
-    age: user.age,
-    phone: user.phone,
-});
+export const userDtoFactory = (user: User): UserDto => new UserDto(user);

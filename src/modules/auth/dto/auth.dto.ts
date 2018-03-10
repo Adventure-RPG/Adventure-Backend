@@ -1,4 +1,4 @@
-import {IsAlphanumeric, IsEmail, IsMobilePhone, IsOptional, IsString, Length} from 'class-validator';
+import {IsAlphanumeric, IsDefined, IsEmail, IsMobilePhone, IsOptional, IsString, Length} from 'class-validator';
 
 export class RegisterDto {
     @IsOptional()
@@ -10,6 +10,7 @@ export class RegisterDto {
     @Length(5, 50)
     readonly last_name: string;
 
+    @IsDefined()
     @IsEmail()
     @Length(10, 255)
     readonly email: string;
@@ -19,12 +20,14 @@ export class RegisterDto {
     @Length(8, 20)
     readonly phone: string;
 
+    @IsDefined()
     @IsAlphanumeric()
     @Length(7, 25)
     password: string;
 }
 
 export class CredentialsDto {
+    @IsDefined()
     @IsEmail()
     @Length(10, 255)
     readonly email: string;

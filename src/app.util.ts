@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 
-export const config = JSON.parse(fs.readFileSync(__dirname + `/environments/${process.env.DEBUG ? 'dev' : 'prod' }/environment.json`, 'utf8'));
+const fn = __dirname + `/environments/environment.${process.env.DEBUG ? 'dev' : 'prod' }.json`;
+const f = fs.readFileSync(fn, 'utf8');
+export const config = JSON.parse(f);
 
 export function Config<T>(name: string) {
     return (target: any, propertyKey: string) => {

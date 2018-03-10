@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import {Controller, Get, UseFilters} from '@nestjs/common';
 import {UserService} from '../services/user.service';
-import {RegisterDto} from '../dto/auth.dto';
 import {FindAllSpecification} from '../specifications/auth.specification';
+import {UserExceptionFilter} from '../filters/user.filter';
 
 @Controller('users')
+@UseFilters(new UserExceptionFilter())
 export class UserController {
   constructor(private _service: UserService) {}
 

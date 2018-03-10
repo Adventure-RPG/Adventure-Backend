@@ -1,0 +1,34 @@
+{
+  "db": {
+    "name": "mongodb://localhost/game-auth",
+    "user": "admin",
+    "password": "admin"
+  },
+  "jwt": {
+    "secretKey": "secret",
+    "options": {
+      "expiresIn": 3600
+    }
+  },
+  "crypto": {
+    "salt": "salt",
+    "iterations": 100000,
+    "keylen": 64,
+    "digest": "sha512"
+  },
+  "logging": {
+    "level": "info",
+    "transports": {
+      "console": [
+        {"name": "consoleLog", "colorize": true}
+      ],
+      "file": [
+        {"name": "errorLog", "filename": "logs/error.log", "level": "error", "timestamp": true, "maxsize": 50000000},
+        {"name": "combinedLog", "filename": "logs/combined.log", "colorize": true, "timestamp": true, "maxsize": 50000000}
+      ],
+      "http": [
+
+      ]
+    }
+  }
+}
