@@ -1,4 +1,9 @@
 {
+  "global": {
+    "domain": "iamborsch.ru",
+    "site": "auth.iamborsch.ru",
+    "main": "http://auth.iamborsch.ru"
+  },
   "db": {
     "name": "mongodb://db/game-auth",
     "user": "admin",
@@ -29,6 +34,22 @@
       "http": [
 
       ]
+    }
+  },
+  "smtp": {
+    "options": {
+      "host": "mail",
+      "port": 587,
+      "auth": {
+        "user": "admin@iamborsch.ru",
+        "pass": "rsersi9p"
+      },
+      "tls": {
+        "rejectUnauthorized": false
+      }
+    },
+    "defaults": {
+      "from": "admin@iamborsch.ru"
     }
   }
 }

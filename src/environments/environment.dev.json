@@ -1,4 +1,10 @@
 {
+  "global": {
+    "project": "Adventure",
+    "domain": "iamborsch.ru",
+    "site": "auth.iamborsch.ru",
+    "main": "http://localhost:8888"
+  },
   "db": {
     "name": "mongodb://localhost/game-auth",
     "user": "admin",
@@ -29,6 +35,29 @@
       "http": [
 
       ]
+    }
+  },
+  "email": {
+    "templateDir": "public/views/email/",
+    "templates": {
+      "verify": "emailVerification.pug"
+    },
+    "smtp": {
+      "options": {
+        "host": "smtp.yandex.ru",
+        "port": 465,
+        "secure": true,
+        "auth": {
+          "user": "admin@iamborsch.ru",
+          "pass": "rsersi9p"
+        },
+        "tls": {
+          "rejectUnauthorized": false
+        }
+      },
+      "defaults": {
+        "from": "admin@iamborsch.ru"
+      }
     }
   }
 }

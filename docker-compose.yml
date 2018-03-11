@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   nginx:
@@ -15,15 +15,16 @@ services:
     volumes:
       - ./dist:/src/dist
       - ./src/environments:/src/dist/environments
+      - ./public:/src/public
       - ./logs:/src/logs
-    environment:
-      - NODE_ENV=production
     user: node
-    command: npm run start:prod
+    command: npm run start:prod --prod
     links:
         - db
+        - mail
     depends_on:
         - db
+        - mail
   db:
     image: mongo:latest
     environment:
@@ -34,3 +35,14 @@ services:
     ports:
         - 27017:27017
     command: mongod --smallfiles
+  mail:
+    extends:
+      file: mail/docker-compose.yml
+      service: mail
+    restart: always
+
+volumes:
+  maildata:
+    driver: local
+  mailstate:
+    driver: local

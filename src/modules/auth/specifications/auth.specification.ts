@@ -1,6 +1,6 @@
 import {Specification} from '../../database/interfaces/specification.interface';
 import {User} from '../interfaces/user.interface';
-import {CredentialsDto} from '../dto/auth.dto';
+import {CredentialsDto, RegisterDto} from '../dto/auth.dto';
 
 export class ByCredentialsSpecification implements Specification<User> {
     email: string;
@@ -19,6 +19,23 @@ export class ByCredentialsSpecification implements Specification<User> {
         return {email: {$eq: this.email}, password: {$eq: this.password}};
     }
 }
+
+export class ByEmailSpecification implements Specification<User> {
+    email: string;
+
+    constructor(register: RegisterDto) {
+        this.email = register.email;
+    }
+
+    specified(user: User): boolean {
+        return this.email === user.email;
+    }
+
+    toClause() {
+        return {email: {$eq: this.email}};
+    }
+}
+
 
 export class FindAllSpecification implements Specification<User> {
     specified(T): boolean { return true; }

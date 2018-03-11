@@ -1,4 +1,4 @@
-import {Component, Inject, Logger, LoggerService} from '@nestjs/common';
+import {Component, Inject, LoggerService} from '@nestjs/common';
 import {USER_DTO_FACTORY_TOKEN, USER_MODEL_TOKEN} from '../constants/user.constants';
 import {Model} from 'mongoose';
 import {User} from '../interfaces/user.interface';
@@ -18,12 +18,14 @@ export class UserService {
 
   async create(_data: RegisterDto): Promise<UserDto> {
       const user = new this._model(_data);
-      return await user.save().then(res => {
-          if (res) return this._factory(res);
-      }, err => {
+      return await user.save().then(this._factory, err => {
           this._logger.error(err.message, err.stack);
           throw new DatabaseError('Error create user with this credentials.');
       });
+  }
+
+  async exists(spec: Specification<User>): Promise<boolean> {
+      return await this._model.find(spec.toClause()).limit(1).then(res => !!res.length);
   }
 
   async query(spec: Specification<User>): Promise<UserDto[]> {

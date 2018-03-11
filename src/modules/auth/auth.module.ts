@@ -7,9 +7,10 @@ import {AuthService} from './services/auth.service';
 import {AuthController} from './controllers/auth.controller';
 import {JwtStrategy} from './middlewares/auth.strategy';
 import * as passport from 'passport';
+import {EmailModule} from '../email/email.module';
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, EmailModule],
     controllers: [UserController, AuthController],
     components: [UserService, AuthService, JwtStrategy, ...userProviders],
 })
