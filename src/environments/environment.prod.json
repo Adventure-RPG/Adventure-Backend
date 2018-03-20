@@ -1,5 +1,6 @@
 {
   "global": {
+    "project": "Adventure",
     "domain": "iamborsch.ru",
     "site": "auth.iamborsch.ru",
     "main": "http://auth.iamborsch.ru"
@@ -36,20 +37,26 @@
       ]
     }
   },
-  "smtp": {
-    "options": {
-      "host": "mail",
-      "port": 587,
-      "auth": {
-        "user": "admin@iamborsch.ru",
-        "pass": "rsersi9p"
-      },
-      "tls": {
-        "rejectUnauthorized": false
-      }
+  "email": {
+    "templateDir": "public/views/email/",
+    "templates": {
+      "verify": "emailVerification.pug"
     },
-    "defaults": {
-      "from": "admin@iamborsch.ru"
+    "smtp": {
+      "options": {
+        "host": "mail",
+        "port": 587,
+        "auth": {
+          "user": "admin@iamborsch.ru",
+          "pass": "rsersi9p"
+        },
+        "tls": {
+          "rejectUnauthorized": false
+        }
+      },
+      "defaults": {
+        "from": "admin@iamborsch.ru"
+      }
     }
   }
 }

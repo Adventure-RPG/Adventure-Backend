@@ -3,7 +3,7 @@
     "project": "Adventure",
     "domain": "iamborsch.ru",
     "site": "auth.iamborsch.ru",
-    "main": "http://localhost:8888"
+    "main": "http://auth.iamborsch.ru"
   },
   "db": {
     "name": "mongodb://localhost/game-auth",
