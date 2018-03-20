@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
 docker-compose down
-tsc
+node_modules/.bin/tsc
 docker-compose build
 docker-compose up -d

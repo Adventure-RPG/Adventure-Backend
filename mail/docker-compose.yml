@@ -4,11 +4,11 @@ services:
     image: tvial/docker-mailserver:latest
     hostname: mail
     domainname: iamborsch.ru
-    ports:
-    - "25:25"
-    - "143:143"
-    - "587:587"
-    - "993:993"
+    expose:
+    - "25"
+    - "143"
+    - "587"
+    - "993"
     volumes:
     - maildata:/var/mail
     - mailstate:/var/mail-state

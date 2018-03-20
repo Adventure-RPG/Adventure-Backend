@@ -5,13 +5,13 @@ services:
     restart: always
     build: ./nginx/
     ports:
-      - "8888:80"
+      - "9998:80"
     links:
       - api:api
   api:
     build: .
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./dist:/src/dist
       - ./src/environments:/src/dist/environments
@@ -32,8 +32,8 @@ services:
       - MONGO_LOG_DIR=/dev/null
     volumes:
       - ./data/db:/data/db
-    ports:
-        - 27017:27017
+    expose:
+        - "27017"
     command: mongod --smallfiles
   mail:
     extends:
