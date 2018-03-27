@@ -1,6 +1,8 @@
 FROM node:8-alpine
 
 RUN mkdir /src
+RUN mkdir -p /src/logs
+RUN chown node /src/logs
 
 RUN npm install nodemon -g
 
