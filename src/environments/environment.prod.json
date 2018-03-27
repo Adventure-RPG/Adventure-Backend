@@ -50,6 +50,9 @@
         "auth": {
           "user": "admin@iamborsch.ru",
           "pass": "rsersi9p"
+        },
+        "tls": {
+          "rejectUnauthorized": false
         }
       },
       "defaults": {
