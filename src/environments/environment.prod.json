@@ -46,14 +46,11 @@
       "options": {
         "host": "mail",
         "port": 587,
-        "secure": true,
+        "secure": false,
         "auth": {
           "user": "admin@iamborsch.ru",
           "pass": "rsersi9p"
         },
-        "tls": {
-          "rejectUnauthorized": false
-        }
       },
       "defaults": {
         "from": "admin@iamborsch.ru"
