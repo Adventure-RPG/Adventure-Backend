@@ -45,8 +45,8 @@
     "smtp": {
       "options": {
         "host": "mail",
-        "port": 465,
-        "secure": true,
+        "port": 587,
+        "secure": false,
         "auth": {
           "user": "admin@iamborsch.ru",
           "pass": "rsersi9p"
