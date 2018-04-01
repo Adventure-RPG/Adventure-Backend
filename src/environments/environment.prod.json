@@ -46,7 +46,7 @@
       "options": {
         "host": "mail",
         "port": 587,
-        "secure": true,
+        "secure": false,
         "requireTLS": true,
         "auth": {
           "user": "admin@iamborsch.ru",
