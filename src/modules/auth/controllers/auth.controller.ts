@@ -34,9 +34,9 @@ export class AuthController {
   async login(@Body() loginDto: CredentialsDto) {
     loginDto.password = await this._auth.hashPwd(loginDto.password);
     const users = await this._user.query(new ByCredentialsSpecification(loginDto));
-    if (!users) { throw new UnauthorizedException('User not found.'); }
+    if (!users.length) { throw new UnauthorizedException('Your account are not found.'); }
     const user = users[0];
-    if (!user.is_active) throw new UnauthorizedException('Your account has not been verified.');
+    if (!user.is_active) throw new UnauthorizedException('Your account has not been verified yet.');
     return this._auth.createToken(user);
   }
 }

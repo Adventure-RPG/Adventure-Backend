@@ -8,6 +8,8 @@
     },
     "rules": {
         "eofline": false,
+        "no-trailing-whitespace": false,
+        "no-consecutive-blank-lines": false,
         "quotemark": [
             true,
             "single"

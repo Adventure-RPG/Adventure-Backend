@@ -11,9 +11,10 @@
     "password": "admin"
   },
   "jwt": {
-    "secretKey": "secret",
+    "secretKey": "keys/id_rsa",
+    "expiresIn": 3600,
     "options": {
-      "expiresIn": 3600
+      "algorithm": "ES512"
     }
   },
   "crypto": {

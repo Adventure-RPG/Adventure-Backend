@@ -14,6 +14,7 @@ services:
       - "3000"
     volumes:
       - ./dist:/src/dist
+      - ./keys:/src/keys
       - ./src/environments:/src/dist/environments
       - ./public:/src/public
     user: node

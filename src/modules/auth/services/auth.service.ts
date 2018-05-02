@@ -5,6 +5,7 @@ import {UserDto} from '../dto/user.dto';
 import {pbkdf2, randomBytes} from 'crypto';
 import {HashError, TokenError} from '../exceptions/auth.exception';
 import {APP_LOGGER_TOKEN} from '../../../constants/app.constants';
+import * as fs from 'fs';
 
 @Component()
 export class AuthService {
@@ -14,18 +15,32 @@ export class AuthService {
 
   @Config('crypto')
   private _hashConfig;
+  private _secret;
 
-  constructor(@Inject(APP_LOGGER_TOKEN) private readonly _logger: LoggerService) {}
+  constructor(@Inject(APP_LOGGER_TOKEN) private readonly _logger: LoggerService) {
+      const value = this._config.secretKey;
+      const parts = value.split('.', 1);
+      if (parts.length > 1) {
+          this._secret = fs.readFileSync(value);
+      } else {
+          this._secret = value;
+      }
+  }
+
+  get secret() {
+      return this._secret;
+  }
 
   async createToken(user: UserDto) {
-    return new Promise((resolve, reject) => jwt.sign(user, this._config.secretKey, this._config.options,
+    const payload = JSON.stringify({exp: Math.floor(Date.now() / 1000) * this._config.expiresIn, data: user});
+    return new Promise((resolve, reject) => jwt.sign(payload, this._secret, this._config.options,
 (err, token) => {
          if (err) {
              this._logger.error(err.message, err.stack);
              reject(new TokenError('Error in token processing.'));
          }
          if (!token) {
-             this._logger.warn(`unable to create token for user ${JSON.stringify(user)}.`);
+             this._logger.warn(`unable to create token with payload ${payload}.`);
              reject(new TokenError('Unable to create token.'));
          }
          resolve({access_token: token});
@@ -34,7 +49,7 @@ export class AuthService {
   }
 
   async validateToken(token: string): Promise<string|object> {
-    return new Promise((resolve, reject) => jwt.verify(token, this._config.secretKey, (err, decoded) => {
+    return new Promise((resolve, reject) => jwt.verify(token, this._secret, (err, decoded) => {
         if (err) {
             this._logger.error(err.message, err.stack);
             reject(new TokenError('Error in token validating.'));

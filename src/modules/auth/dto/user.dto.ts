@@ -18,6 +18,13 @@ export class UserDto {
         this.age = user.age;
         this.is_active = user.is_active;
     }
+
+    toJSON() {
+        return {
+          email: this.email,
+          is_active: this.is_active,
+        };
+    }
 }
 
 export const userDtoFactory = (user: User): UserDto => new UserDto(user);
