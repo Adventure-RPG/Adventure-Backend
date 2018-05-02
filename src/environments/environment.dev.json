@@ -46,6 +46,7 @@
     "smtp": {
       "options": {
         "host": "smtp.yandex.ru",
+        "pool": true,
         "port": 465,
         "secure": true,
         "auth": {

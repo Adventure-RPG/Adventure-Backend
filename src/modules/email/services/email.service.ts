@@ -6,6 +6,7 @@ import * as Mail from 'nodemailer/lib/mailer';
 import {APP_LOGGER_TOKEN} from '../../../constants/app.constants';
 import {UserDto} from '../../auth/dto/user.dto';
 import {EmailVerifyDto} from '../email.dto';
+import {Message} from '../email.models';
 import * as pug from 'pug';
 
 @Component()
@@ -15,42 +16,58 @@ export class EmailService {
 
   @Config('email')
   private _config;
-  private _connectedSuccessful: boolean = false;
   private _mailer: Mail;
+  private _messages: Message[] = [];
+  private _connectionTimeout = 10000;
 
   constructor(@Inject(APP_LOGGER_TOKEN) private _logger: LoggerService) {
     this.connect();
   }
 
   sendVerificationEmail(user: UserDto, verify: EmailVerifyDto) {
-    const title = pug.renderFile(this._config.templateDir + 'title/' + this._config.templates.verify, {name: user.email, project: this._global.project});
+    const subject = pug.renderFile(this._config.templateDir + 'title/' + this._config.templates.verify, {name: user.email, project: this._global.project});
     const html = pug.renderFile(this._config.templateDir + 'body/html/' + this._config.templates.verify, {name: user.email, link: this.generateVerifyLink(verify.token), project: this._global.project});
-    const plain = pug.renderFile(this._config.templateDir + 'body/plain/' + this._config.templates.verify, {name: user.email, link: this.generateVerifyLink(verify.token), project: this._global.project});
-
-    this.sendMail(user.email, title, html, plain);
+    const text = pug.renderFile(this._config.templateDir + 'body/plain/' + this._config.templates.verify, {name: user.email, link: this.generateVerifyLink(verify.token), project: this._global.project});
+    this._messages.push({to: user.email, subject, html, text});
+    this.sendMessages();
   }
 
-  async connect(): Promise<boolean> {
-    this._mailer = nodemailer.createTransport(this._config.smtp.options, this._config.smtp.defaults);
+  async connect() {
+      this._mailer = nodemailer.createTransport(this._config.smtp.options, this._config.smtp.defaults);
+      this._mailer.on('idle', () => {
+          this.sendMessages();
+      });
 
+      this.verify().catch(() => setTimeout(() => this.connect(), this._connectionTimeout));
+  }
+
+  async verify(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
         this._mailer.verify((err) => {
             if (err) {
                 this._logger.warn(err.message);
                 reject(err);
-                this._connectedSuccessful = false;
             } else {
-              this._connectedSuccessful = true;
+              this._logger.log(`Connected to mail server ${this._config.smtp.options.host}:${this._config.smtp.options.port}.`);
               resolve(true);
             }
         });
     });
   }
 
-  async sendMail(to, subject, html, text): Promise<SentMessageInfo> {
-    if (!this._connectedSuccessful)
-      await this.connect();
-    return this._mailer.sendMail({to, subject, html, text});
+  async sendMail(msg: Message): Promise<SentMessageInfo> {
+    return this._mailer.sendMail(msg)
+        .then(res => this._logger.log(`Message ${res} sended successful to ${msg.to}.`))
+        .catch(err => this._logger.warn(err.message));
+  }
+
+  async sendMessages() {
+      while (this._mailer.isIdle() && this._messages.length)
+          this.sendMail(this._messages.shift());
+      if (!this._mailer.isIdle()) {
+          this._mailer.close();
+          this.connect();
+      }
   }
 
   generateVerifyLink(token: string) {
