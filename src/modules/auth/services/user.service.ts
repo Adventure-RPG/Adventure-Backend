@@ -24,6 +24,28 @@ export class UserService {
       });
   }
 
+  async findOne(userId): Promise<UserDto> {
+      return this._model.findOne({ _id: userId }).then(res => this._factory(res), err => {
+          this._logger.error(err.message, err.stack);
+          throw new DatabaseError(`Error when querying user by id ${userId}`);
+      });
+  }
+
+
+  async update(userId, params): Promise<UserDto> {
+      return new Promise<UserDto>((resolve, reject) => {
+          return this._model.findByIdAndUpdate(userId, params, (err, res) => {
+              if (err) {
+                  this._logger.error(err.message, err.stack);
+                  reject(new DatabaseError(`Error when trying update user ${userId} with params ${params}`));
+              } else {
+                  resolve(res);
+              }
+
+          });
+      });
+  }
+
   async exists(spec: Specification<User>): Promise<boolean> {
       return await this._model.find(spec.toClause()).limit(1).then(res => !!res.length);
   }

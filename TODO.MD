@@ -3,6 +3,7 @@
 - [x] MongoDB backend support
 - [x] Update docker-compose with MongoDB
 - [x] Add logger messages to all API methods
-- [ ] Update token generation algorithm with ECDSA key
-- [ ] Add email service for user activation
+- [x] Update token generation algorithm with ECDSA key
+- [x] Add email service for user activation
+- [ ] Generate guest token for middle REST methods
 - [ ] Refactoring

@@ -25,20 +25,20 @@ export class EmailService {
   }
 
   sendVerificationEmail(user: UserDto, verify: EmailVerifyDto) {
-    const subject = pug.renderFile(this._config.templateDir + 'title/' + this._config.templates.verify, {name: user.email, project: this._global.project});
-    const html = pug.renderFile(this._config.templateDir + 'body/html/' + this._config.templates.verify, {name: user.email, link: this.generateVerifyLink(verify.token), project: this._global.project});
-    const text = pug.renderFile(this._config.templateDir + 'body/plain/' + this._config.templates.verify, {name: user.email, link: this.generateVerifyLink(verify.token), project: this._global.project});
+    const templateVariables = {name: user.email, project: this._global.project};
+    const subject = pug.renderFile(this._config.templateDir + 'title/' + this._config.templates.verify, templateVariables);
+    (templateVariables as any).link = this.generateVerifyLink(verify.token);
+    const html = pug.renderFile(this._config.templateDir + 'body/html/' + this._config.templates.verify, templateVariables);
+    const text = pug.renderFile(this._config.templateDir + 'body/plain/' + this._config.templates.verify, templateVariables);
     this._messages.push({to: user.email, subject, html, text});
     this.sendMessages();
   }
 
-  async connect() {
+  connect() {
       this._mailer = nodemailer.createTransport(this._config.smtp.options, this._config.smtp.defaults);
-      this._mailer.on('idle', () => {
-          this.sendMessages();
-      });
-
-      this.verify().catch(() => setTimeout(() => this.connect(), this._connectionTimeout));
+      this.verify()
+          .then(() => this.sendMessages())
+          .catch(() => setTimeout(() => this.connect(), this._connectionTimeout));
   }
 
   async verify(): Promise<boolean> {
@@ -56,21 +56,26 @@ export class EmailService {
   }
 
   async sendMail(msg: Message): Promise<SentMessageInfo> {
-    return this._mailer.sendMail(msg)
-        .then(res => this._logger.log(`Message ${res} sended successful to ${msg.to}.`))
-        .catch(err => this._logger.warn(err.message));
+    return new Promise<SentMessageInfo>((resolve, reject) => {
+        this._mailer.sendMail(msg, (err, info) => {
+            if (err) {
+                this._logger.warn(err.message);
+                this._messages.push(msg);
+                reject(err);
+            } else {
+                this._logger.log(`Message ${info} sended successful to ${msg.to}.`);
+                resolve(info);
+            }
+        });
+    });
   }
 
   async sendMessages() {
-      while (this._mailer.isIdle() && this._messages.length)
+      while (this._mailer.isIdle() && this._messages.length > 0)
           this.sendMail(this._messages.shift());
-      if (!this._mailer.isIdle()) {
-          this._mailer.close();
-          this.connect();
-      }
   }
 
   generateVerifyLink(token: string) {
-    return this._global.main + `/api/v1/confirm/${token}`;
+    return this._global.main + `/auth/confirm/${token}`;
   }
 }

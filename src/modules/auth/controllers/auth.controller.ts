@@ -1,13 +1,18 @@
-import {Body, Controller, Post, UseFilters, UsePipes, ValidationPipe} from '@nestjs/common';
-import {CredentialsDto, RegisterDto} from '../dto/auth.dto';
+import {Body, Controller, Param, Post, UseFilters, UsePipes, ValidationPipe} from '@nestjs/common';
+import {CredentialsDto, RegisterDto, SendDto} from '../dto/auth.dto';
 import {UserService} from '../services/user.service';
-import {ByCredentialsSpecification, ByEmailSpecification} from '../specifications/auth.specification';
+import {
+    ByCredentialsSpecification,
+    ByEmailSpecification,
+    BySendSpecification
+} from '../specifications/auth.specification';
 import {AuthService} from '../services/auth.service';
 import {BadRequestException} from '@nestjs/common/exceptions/bad-request.exception';
 import {AuthExceptionFilter} from '../filters/auth.filter';
 import {EmailService} from '../../email/services/email.service';
 import {UnauthorizedException} from '@nestjs/common/exceptions/unauthorized.exception';
 import {RepositoryService as EmailRepositoryService} from '../../email/services/repository.service';
+import {ByTokenSpecification} from '../../email/email.specification';
 
 @Controller('auth')
 @UseFilters(new AuthExceptionFilter())
@@ -21,13 +26,32 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const exists = await this._user.exists(new ByEmailSpecification(registerDto));
-    if (exists) { throw new BadRequestException('User already registered.')}
+    if (exists) { throw new BadRequestException('User already registered.'); }
 
     registerDto.password = await this._auth.hashPwd(registerDto.password);
     const user = await this._user.create(registerDto);
     const emailVerify = await this._emailRep.create({_userId: user._id, token: await this._auth.generateToken()});
     this._emailService.sendVerificationEmail(user, emailVerify);
     return user;
+  }
+
+  @Post('resend_email')
+  async resend_email(@Body() sendDto: SendDto) {
+      const users = await this._user.query(new BySendSpecification(sendDto));
+      if (!users.length) { throw new UnauthorizedException('Your account are already registered or not found.'); }
+      const user = users[0];
+      const emailVerify = await this._emailRep.create({_userId: user._id, token: await this._auth.generateToken()});
+      this._emailService.sendVerificationEmail(user, emailVerify);
+      return user;
+  }
+
+  @Post('confirm/:token')
+  async accept_email(@Param() params) {
+      const verifies = await this._emailRep.query(new ByTokenSpecification(params.token));
+      if (!verifies.length) {throw new UnauthorizedException('Token is not found.'); }
+      const verify = verifies[0];
+      console.log(verify);
+      return await this._user.update(verify._userId, {is_active: true});
   }
 
   @Post('login')

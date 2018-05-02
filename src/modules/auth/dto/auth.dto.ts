@@ -36,3 +36,10 @@ export class CredentialsDto {
     @Length(7, 25)
     password: string;
 }
+
+export class SendDto {
+    @IsDefined()
+    @IsEmail()
+    @Length(10, 255)
+    readonly email: string;
+}

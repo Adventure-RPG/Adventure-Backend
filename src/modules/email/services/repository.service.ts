@@ -5,6 +5,7 @@ import {EmailVerify, EmailVerifyPayload} from '../email.interfaces';
 import {APP_LOGGER_TOKEN} from '../../../constants/app.constants';
 import {EmailVerifyDto} from '../email.dto';
 import {DatabaseError} from '../../auth/exceptions/user.exception';
+import {Specification} from '../../database/interfaces/specification.interface';
 
 @Component()
 export class RepositoryService {
@@ -18,5 +19,13 @@ export class RepositoryService {
           this._logger.error(err.message, err.stack);
           throw new DatabaseError(`Error create email verification model for user ${data._userId} with token ${data.token}`);
       });
+  }
+
+  async query(spec: Specification<EmailVerify>): Promise<EmailVerifyDto[]> {
+      return await this._model.find(spec.toClause()).exec()
+          .then((res: EmailVerify[]) => res.map(ver => this._factory(ver)), err => {
+              this._logger.error(err.message, err.stack);
+              throw new DatabaseError(`Error when querying by spec`);
+          });
   }
 }
