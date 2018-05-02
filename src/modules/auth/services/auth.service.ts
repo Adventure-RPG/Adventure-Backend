@@ -64,7 +64,7 @@ export class AuthService {
 
   async validate(payload) {
       return new Promise((resolve, reject) => {
-          if (!payload || !payload.email || !payload.exp) {
+          if (!payload || !payload.data || !payload.data.email || !payload.exp) {
               this._logger.warn(`Invalid payload ${JSON.stringify(payload)}`);
               reject(new TokenError('Invalid payload.'));
           }
