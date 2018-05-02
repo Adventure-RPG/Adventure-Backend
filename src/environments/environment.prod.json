@@ -11,10 +11,10 @@
     "password": "admin"
   },
   "jwt": {
-    "secretKey": "keys/rsa_key.pem",
+    "secretKey": "testsecret",
     "expiresIn": 3600,
     "options": {
-      "algorithm": "ES512"
+      "algorithm": "HS512"
     }
   },
   "crypto": {
