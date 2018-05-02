@@ -39,7 +39,7 @@ export class UserService {
                   this._logger.error(err.message, err.stack);
                   reject(new DatabaseError(`Error when trying update user ${userId} with params ${params}`));
               } else {
-                  resolve(res);
+                  resolve(this._factory(res));
               }
 
           });

@@ -50,7 +50,6 @@ export class AuthController {
       const verifies = await this._emailRep.query(new ByTokenSpecification(params.token));
       if (!verifies.length) {throw new UnauthorizedException('Token is not found.'); }
       const verify = verifies[0];
-      console.log(verify);
       return await this._user.update(verify._userId, {is_active: true});
   }
 
