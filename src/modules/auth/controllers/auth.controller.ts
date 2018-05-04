@@ -13,7 +13,9 @@ import {EmailService} from '../../email/services/email.service';
 import {UnauthorizedException} from '@nestjs/common/exceptions/unauthorized.exception';
 import {RepositoryService as EmailRepositoryService} from '../../email/services/repository.service';
 import {ByTokenSpecification} from '../../email/email.specification';
+import {ApiResponse, ApiUseTags} from '@nestjs/swagger';
 
+@ApiUseTags('auth')
 @Controller('auth')
 @UseFilters(new AuthExceptionFilter())
 @UsePipes(new ValidationPipe())
@@ -24,6 +26,8 @@ export class AuthController {
               private readonly _emailService: EmailService) {}
 
   @Post('register')
+  @ApiResponse({status: 201, description: 'User created successfully. Check email for verification.'})
+  @ApiResponse({status: 400, description: 'Error corrupted while processing'})
   async register(@Body() registerDto: RegisterDto) {
     const exists = await this._user.exists(new ByEmailSpecification(registerDto));
     if (exists) { throw new BadRequestException('User already registered.'); }
@@ -36,6 +40,8 @@ export class AuthController {
   }
 
   @Post('resend_email')
+  @ApiResponse({status: 201, description: 'Check email for verification.'})
+  @ApiResponse({status: 400, description: 'Error corrupted while processing'})
   async resend_email(@Body() sendDto: SendDto) {
       const users = await this._user.query(new BySendSpecification(sendDto));
       if (!users.length) { throw new UnauthorizedException('Your account are already registered or not found.'); }
@@ -46,6 +52,8 @@ export class AuthController {
   }
 
   @Post('confirm/:token')
+  @ApiResponse({status: 201, description: 'Account verificated.'})
+  @ApiResponse({status: 400, description: 'Error corrupted while processing'})
   async accept_email(@Param() params) {
       const verifies = await this._emailRep.query(new ByTokenSpecification(params.token));
       if (!verifies.length) {throw new UnauthorizedException('Token is not found.'); }
@@ -54,6 +62,8 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiResponse({status: 201, description: 'Login successful.'})
+  @ApiResponse({status: 400, description: 'Error corrupted while processing'})
   async login(@Body() loginDto: CredentialsDto) {
     loginDto.password = await this._auth.hashPwd(loginDto.password);
     const users = await this._user.query(new ByCredentialsSpecification(loginDto));
