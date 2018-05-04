@@ -20,6 +20,7 @@ async function bootstrap() {
 		.setDescription('Game authorization API')
 		.setVersion('0.1')
 		.addTag('auth')
+		.addBearerAuth('Bearer', 'header')
         .setBasePath('api/v1')
 		.build();
 	const document = SwaggerModule.createDocument(app, options);
