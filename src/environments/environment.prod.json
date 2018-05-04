@@ -2,8 +2,8 @@
   "global": {
     "project": "Adventure",
     "domain": "iamborsch.ru",
-    "site": "auth.iamborsch.ru",
-    "main": "http://auth.iamborsch.ru"
+    "site": "client.iamborsch.ru",
+    "main": "http://client.iamborsch.ru"
   },
   "db": {
     "name": "mongodb://db/game-auth",
